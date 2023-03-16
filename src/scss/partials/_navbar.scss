@@ -1,0 +1,44 @@
+@use "./variables" as *;
+
+.navbar {
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    background-color: $primary-color;
+    margin: 0;
+    flex-direction: column;
+    padding: 0;
+    
+    
+
+    &__item {
+        display: flex;
+        
+        align-items: center;
+        flex-direction: column;
+
+    }
+
+    &__btn {
+        margin: 20px;
+        padding: 20px;
+        background-color: $third-color;
+        border-radius: 10px;
+        width: 10%;
+        text-align: center;
+        text-decoration: none;
+        font-size: 1rem;
+        min-width: 100px;
+
+        &:visited, &:active {
+            color: $primary-color;
+        }
+        
+    }
+
+    &__home {
+        display: none;
+        font-size: 2rem;
+        color: white;
+    }
+}

@@ -1,0 +1,52 @@
+@use "./variables" as *;
+
+.pricing {
+    display: flex;
+    flex-direction: column;
+    background-color: $primary-color;
+    row-gap: 100px;
+    align-items: center;
+
+    &__card {
+        border: 5px solid $secondary-color;
+        background-color: $third-color;
+        width: 80%;
+        row-gap: 200px;
+        display: flex;
+        flex-direction: column;
+        
+        &:first-child {
+            margin-top: 100px;
+        }
+      
+    }
+
+    &__btn{
+        width: 20%;
+        height: 2rem;
+        border-radius: 2px;
+        color: $third-color;
+        background-color: $primary-color;
+
+    }
+
+    &__info-list {
+       list-style: none;
+       text-align: center;
+       padding: 0;
+    
+    }
+
+    &__info-item {
+        margin-top: 20px;
+        text-align: center;
+        vertical-align: bottom;
+
+        &:first-child {
+            border-top: 5px solid black;
+            margin: 0 20px;
+            padding-top: 25px;
+            
+        }
+    }
+}
