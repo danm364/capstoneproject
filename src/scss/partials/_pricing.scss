@@ -2,22 +2,26 @@
 
 .pricing {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     background-color: $primary-color;
+    column-gap: 50px;
     row-gap: 100px;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    
 
     &__card {
         border: 5px solid $secondary-color;
         background-color: $third-color;
         width: 80%;
-        row-gap: 200px;
+        max-width: 430px;
+        text-align: center;
         display: flex;
         flex-direction: column;
+      
         
-        &:first-child {
-            margin-top: 100px;
-        }
+       
       
     }
 

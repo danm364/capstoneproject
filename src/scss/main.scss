@@ -1,7 +1,9 @@
 @use "./partials/navbar" as *;
 @use "./partials/pricing" as *;
+@use "./partials/variables" as *;
 body {
     margin: 0;
     box-sizing: border-box;
+    color: $secondary-color;
 }
 

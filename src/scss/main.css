@@ -34,21 +34,23 @@
 
 .pricing {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: #116466;
+  -moz-column-gap: 50px;
+       column-gap: 50px;
   row-gap: 100px;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 .pricing__card {
   border: 5px solid #2c3531;
   background-color: #ffcb9a;
   width: 80%;
-  row-gap: 200px;
+  max-width: 430px;
+  text-align: center;
   display: flex;
   flex-direction: column;
-}
-.pricing__card:first-child {
-  margin-top: 100px;
 }
 .pricing__btn {
   width: 20%;
@@ -76,4 +78,5 @@
 body {
   margin: 0;
   box-sizing: border-box;
+  color: #2c3531;
 }/*# sourceMappingURL=main.css.map */
