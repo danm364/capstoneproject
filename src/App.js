@@ -1,16 +1,27 @@
 import React, {useState} from 'react';
 import './scss/main.css';
-import Navbar from './components/navbar';
+import Login from './components/Login';
 import Pricing from './components/pricing';
+import {Routes, Route, Link} from 'react-router-dom';
 
 function App() {
-
-  const [word, setWord] = React.useState('logout')
-
   return (
     <div className="App">
-      <Navbar message={word} />
-      <Pricing />
+      <nav className='nav'>
+            <ul className="navbar">
+              <li className="navbar__item">
+                <Link to="/" className="navbar__btn" >Home</Link>
+              </li>               
+              <li className="navbar__item ">
+                <Link to="/portfolio" className="navbar__btn" >Portfolio</Link>
+                <Link to="/login" className="navbar__btn" >Login</Link>
+              </li>
+          </ul>
+      </nav>
+      <Routes>
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
     </div>
   );
 }
