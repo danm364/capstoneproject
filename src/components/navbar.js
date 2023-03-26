@@ -5,6 +5,8 @@ import React from "react";
 //     return <h1>Hello Dan</h1>
 // }
 
+
+
 const Navbar = () => {
     return (
         <nav>
@@ -12,6 +14,7 @@ const Navbar = () => {
                 <li className="navbar__item">
                     <a className="navbar__btn">Home</a>
                 </li>
+                <h1 className="date"></h1>
                 <li className="navbar__item">
                     <h1 className="navbar__home">HOME</h1>
                 </li>
