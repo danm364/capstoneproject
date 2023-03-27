@@ -2,7 +2,7 @@
   display: flex;
   list-style: none;
   justify-content: space-between;
-  background-color: #116466;
+  background-color: #1F2833;
   margin: 0;
   flex-direction: column;
   padding: 0;
@@ -15,16 +15,20 @@
 .navbar__btn {
   margin: 20px;
   padding: 20px;
-  background-color: #ffcb9a;
+  background-color: #116466;
   border-radius: 10px;
   width: 10%;
   text-align: center;
   text-decoration: none;
   font-size: 1rem;
   min-width: 100px;
+  color: white;
+}
+.navbar__btn a {
+  color: white;
 }
 .navbar__btn:visited, .navbar__btn:active {
-  color: #116466;
+  color: white;
 }
 .navbar__home {
   display: none;
@@ -32,6 +36,14 @@
   color: white;
 }
 
+@media (min-width: 768px) {
+  .navbar {
+    flex-direction: row;
+  }
+  .navbar__item {
+    flex-direction: row;
+  }
+}
 .pricing {
   display: flex;
   flex-direction: row;
@@ -73,6 +85,85 @@
   border-top: 5px solid black;
   margin: 0 20px;
   padding-top: 25px;
+}
+
+.login__header {
+  color: #116466;
+}
+.login__btn {
+  padding: 10px 0;
+  border-radius: 10px;
+  border: none;
+  background-color: #116466;
+  color: white;
+}
+.login__bg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 800px;
+  background-image: url(../../public/images/retro-wallstreet.jpg);
+  background-size: cover;
+  background-position: bottom;
+  background-color: #F8F8F8;
+}
+.login__form {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  height: 450px;
+  justify-content: space-around;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: white;
+  max-width: 357px;
+  align-items: center;
+}
+.login__form * {
+  width: 85%;
+}
+.login__label {
+  color: #D0D0D0;
+  font-size: 0.8rem;
+  align-self: flex-start;
+}
+.login__input {
+  height: 2rem;
+  border-radius: 10px;
+  border: solid 1px #D0D0D0;
+  padding: 22.5px 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.login__options {
+  display: inline-flex;
+}
+.login__checkbox {
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: 0;
+}
+.login__forgot {
+  text-align: end;
+  color: #116466;
+  font-weight: 600;
+}
+.login__remember {
+  margin-left: 8px;
+}
+.login__register {
+  text-align: center;
+}
+.login__register span {
+  color: #116466;
+  font-weight: 600;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 body {

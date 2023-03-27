@@ -1,6 +1,8 @@
 @use "./partials/navbar" as *;
 @use "./partials/pricing" as *;
 @use "./partials/variables" as *;
+@use "./partials/login" as *;
+
 body {
     margin: 0;
     box-sizing: border-box;
