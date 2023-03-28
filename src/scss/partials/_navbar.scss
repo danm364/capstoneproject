@@ -4,7 +4,7 @@
     display: flex;
     list-style: none;
     justify-content: space-between;
-    background-color: #1F2833;
+    background-color: $navbar-color;
     margin: 0;
     flex-direction: column;
     padding: 0;
@@ -27,9 +27,9 @@
         width: 10%;
         text-align: center;
         text-decoration: none;
-        font-size: 1rem;
+        font-size: 1.5rem;
         min-width: 100px;
-        color: white;
+        color: $white-text;
         
         & a {
             color: $white-text;
@@ -45,7 +45,7 @@
     &__home {
         display: none;
         font-size: 2rem;
-        color: white;
+        color: $white-text;
     }
 }
 

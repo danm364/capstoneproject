@@ -19,7 +19,7 @@ function App() {
           </ul>
       </nav>
       <Routes>
-        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/" element={<Pricing />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </div>
