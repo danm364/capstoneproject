@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import './scss/main.css';
 import Login from './components/Login';
-import Pricing from './components/pricing';
+import Pricing from './components/Pricing';
+import Portfolio from './components/Portfolio';
 import {Routes, Route, Link} from 'react-router-dom';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Pricing />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/portfolio" element={<Portfolio />} />
       </Routes>
     </div>
   );
