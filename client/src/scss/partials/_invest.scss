@@ -1,0 +1,40 @@
+@use "./variables" as *;
+
+.container {
+    background-color: $primary-bg;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    row-gap: 20px;
+
+}
+
+.buy, .sell, .quote {
+    width: 30vw;
+    background-color: white;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px;
+    min-width: 300px;
+    
+
+    & * {
+        width: 70%;
+        box-sizing: content-box;
+        padding: 20px 0;
+        
+    }
+}
+
+@media (min-width:1114px) {
+
+    .container {
+        flex-direction: row;
+    }
+    
+}
