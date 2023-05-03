@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from 'axios';
-
+import vantageApiKey from '../../../config';
 
 
     const InvestCard = (props) => {
@@ -37,7 +37,7 @@ import axios from 'axios';
             },
             headers: {
               'content-type': 'application/octet-stream',
-              'X-RapidAPI-Key': '8c343d9510msh676992d9d0fa551p14b1a5jsn027b5dac3ae6',
+              'X-RapidAPI-Key': vantageApiKey,
               'X-RapidAPI-Host': 'alpha-vantage.p.rapidapi.com'
             }
           }
