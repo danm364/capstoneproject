@@ -1,0 +1,92 @@
+{
+  "stockData": [
+    {
+      "transactionType": "Buy",
+      "ticker": "MSFT",
+      "price": "100",
+      "quantity": "30",
+      "date": "05/12/2020, 6:50:21 PM",
+      "id": 1
+    },
+    {
+      "transactionType": "Buy",
+      "ticker": "MSFT",
+      "price": "100",
+      "quantity": "30",
+      "date": "05/22/2022, 6:50:21 PM",
+      "id": 2
+    },
+    {
+      "transactionType": "Buy",
+      "ticker": "AAPL",
+      "price": "169.6800",
+      "quantity": "13",
+      "date": "4/29/2023, 6:53:11 PM",
+      "id": 3
+    },
+    {
+      "transactionType": "Sell",
+      "ticker": "MSFT",
+      "price": "307.2600",
+      "quantity": "5",
+      "date": "4/29/2023, 6:53:28 PM",
+      "id": 4
+    },
+    {
+      "transactionType": "Buy",
+      "ticker": "MSFT",
+      "price": "307.2600",
+      "quantity": "4",
+      "date": "4/30/2023, 11:58:51 AM",
+      "id": 5
+    },
+    {
+      "transactionType": "Buy",
+      "ticker": "AAPL",
+      "price": "169.6800",
+      "quantity": "2",
+      "date": "4/30/2023, 12:15:45 PM",
+      "id": 6
+    },
+    {
+      "transactionType": "Sell",
+      "ticker": "MSFT",
+      "price": "307.2600",
+      "quantity": "4",
+      "date": "4/30/2023, 12:21:22 PM",
+      "id": 7
+    },
+    {
+      "transactionType": "Buy",
+      "ticker": "TSLA",
+      "price": "161.8300",
+      "quantity": "",
+      "date": "5/1/2023, 10:04:57 PM",
+      "id": 8
+    },
+    {
+      "transactionType": "Buy",
+      "ticker": "TSLA",
+      "price": "161.8300",
+      "quantity": "4",
+      "date": "5/1/2023, 10:05:03 PM",
+      "id": 9
+    },
+    {
+      "transactionType": "Buy",
+      "ticker": "TSLA",
+      "price": "161.8300",
+      "quantity": "4",
+      "date": "5/1/2023, 10:05:06 PM",
+      "id": 10
+    },
+    {
+      "transactionType": "Sell",
+      "ticker": "GOOGL",
+      "price": "107.2000",
+      "quantity": "3",
+      "date": "5/1/2023, 10:09:22 PM",
+      "id": 11
+    }
+  ]
+}

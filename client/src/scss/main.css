@@ -194,6 +194,9 @@
   border: 1px solid white;
   background-color: white;
 }
+.portfolio__list {
+  padding: 0;
+}
 .portfolio__headers {
   display: flex;
   width: 40vw;
@@ -201,16 +204,42 @@
 .portfolio__headers * {
   flex: 33%;
   color: white;
+  text-decoration: none;
+  list-style-type: none;
+  margin-top: 5px;
 }
 
 .container {
   background-color: #1F2833;
-  height: 1000px;
+  height: 700px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: start;
   row-gap: 20px;
+}
+
+.feed {
+  height: 400px;
+  display: flex;
+  background-color: #1F2833;
+  justify-content: center;
+}
+.feed__section {
+  display: flex;
+  width: 95%;
+  background-color: #F8F8F8;
+  justify-self: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.feed__cols {
+  display: flex;
+  width: 100%;
+}
+.feed__cols * {
+  flex-grow: 1;
+  flex-basis: 0;
 }
 
 .buy, .sell, .quote {
@@ -225,10 +254,14 @@
   min-width: 300px;
   min-height: 550px;
 }
+.buy input, .sell input, .quote input {
+  padding-left: 10px;
+}
 .buy *, .sell *, .quote * {
   width: 70%;
   box-sizing: content-box;
   padding: 20px 0;
+  padding-left: 10px;
 }
 
 .transaction__ticker, .transaction__price {

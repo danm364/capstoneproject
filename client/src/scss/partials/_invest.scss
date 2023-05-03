@@ -2,7 +2,7 @@
 
 .container {
     background-color: $primary-bg;
-    height: 1000px;
+    height: 700px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -11,6 +11,33 @@
 
 }
 
+.feed {
+  
+    height: 400px;
+    display: flex;
+    background-color: $primary-bg;
+    justify-content: center;
+
+    &__section {
+        display: flex;
+        width: 95%;
+        background-color: $bg-color;
+        justify-self: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+    
+    }
+    &__cols {
+        display: flex;
+        width: 100%;
+        
+
+        & * {
+            flex-grow: 1;
+            flex-basis: 0;
+        }
+    }
+}
 .buy, .sell, .quote {
     width: 30vw;
     background-color: white;
@@ -23,11 +50,16 @@
     min-width: 300px;
     min-height: 550px;
     
+    & input{
+        padding-left: 10px;
+        
+    }
 
     & * {
         width: 70%;
         box-sizing: content-box;
         padding: 20px 0;
+        padding-left: 10px;
         
     }
 }
