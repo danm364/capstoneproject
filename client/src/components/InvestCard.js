@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import vantageApiKey from '../../../config';
+import vantageApiKey from '../config';
 
 
     const InvestCard = (props) => {
