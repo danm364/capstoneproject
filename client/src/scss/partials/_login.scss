@@ -1,0 +1,100 @@
+@use "../partials/variables" as *;
+
+
+.login {
+
+    &__header {
+        color: $primary-color
+    }
+
+    &__btn {
+        padding: 10px 0;
+        border-radius: 10px;
+        border: none;
+        background-color: $primary-color;
+        color: $white-text;
+    }
+
+    &__bg {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 800px;
+        background-image: url(../../public/images/retro-wallstreet.jpg);
+        background-size: cover;
+        background-position: bottom;
+        background-color: $bg-color;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        height: 450px;
+        justify-content: space-around;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background-color: white;
+        max-width: 357px;
+        align-items: center;
+
+        & * {
+            width: 85%;
+        }
+    }
+
+    &__label {
+        color: $light-text;
+        font-size: 0.8rem;
+        align-self: flex-start;
+    }
+
+    &__input {
+        height: 2rem;
+        border-radius: 10px;
+        border: solid 1px $light-text;
+        padding: 22.5px 15px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    &__options {
+        display: inline-flex;
+        
+    }
+
+    &__checkbox {
+        width: fit-content;
+        margin: 0;
+    }
+
+    &__forgot {
+        text-align: end;
+        color: $primary-color;
+        font-weight: 600;
+        
+    }
+
+    &__remember {
+        margin-left: 8px;
+    }
+
+    &__register {
+        text-align: center;
+        & span {
+            color: $primary-color;
+            font-weight: 600;
+        }
+    }
+
+   
+
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}

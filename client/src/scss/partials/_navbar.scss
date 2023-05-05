@@ -1,0 +1,64 @@
+@use "./variables" as *;
+
+.navbar {
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    background-color: $primary-bg;
+    margin: 0;
+    flex-direction: column;
+    padding: 0;
+    
+    
+
+    &__item {
+        display: flex;
+        
+        align-items: center;
+        flex-direction: column;
+
+    }
+
+    &__btn {
+        margin: 20px;
+        padding: 20px;
+        background-color: $primary-color;
+        border-radius: 10px;
+        width: 10%;
+        text-align: center;
+        text-decoration: none;
+        font-size: 1.5rem;
+        min-width: 100px;
+        color: $white-text;
+        
+        & a {
+            color: $white-text;
+        }
+
+        &:visited, &:active {
+            color: $white-text;
+            
+        }
+        
+    }
+
+    &__home {
+        display: none;
+        font-size: 2rem;
+        color: $white-text;
+    }
+}
+
+@media (min-width:768px) {
+
+    .navbar {
+        flex-direction: row;
+
+        &__item {
+            flex-direction: row;
+        }
+    }
+
+
+    
+}
