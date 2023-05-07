@@ -1,11 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import vantageApiKey from '../config';
+import { vantageApiKey } from '../config';
 
 
     const InvestCard = (props) => {
-        
+    
+    
+    
     const API_URL = 'http://localhost:3500/stockData'
 
     const [quoteTicker, setTicker] = useState('');
@@ -51,7 +53,8 @@ import vantageApiKey from '../config';
             if (props.header === 'Sell') {
                 let date = new Date()
                 date = date.toLocaleString()
-                axios.post(API_URL, {
+                axios.post("http://localhost:3500/addtransaction", {
+                    profile: 1,
                     transactionType: props.header,
                     ticker: response.data['Global Quote']['01. symbol'],
                     price: response.data['Global Quote']['05. price'],
@@ -65,7 +68,9 @@ import vantageApiKey from '../config';
                 console.log(date)
                 console.log(quantity.value)
 
-                axios.post(API_URL, {
+                axios.post("http://localhost:3500/addtransaction", {
+                    
+                    profile: 1,
                     transactionType: props.header,
                     ticker: response.data['Global Quote']['01. symbol'],
                     price: response.data['Global Quote']['05. price'],
@@ -73,10 +78,14 @@ import vantageApiKey from '../config';
                     date: date
                     
                     
+                }).then((response) => {
+                    console.log(response)
+                }).catch((error) => {
+                    console.log(error)
                 })
             
             }
-            console.log(response)
+            
         })
     
     

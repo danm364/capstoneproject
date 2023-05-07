@@ -11,10 +11,11 @@ const TransactionFeed = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        axios.get(API_URL)
-          .then(response => setData(response.data))
+        axios.get("http://localhost:3500/retrieveTrans")
+        //   .then(response => setData(response.data))
+            .then(response => setData(JSON.parse(response.data)))
           .catch(error => console.log(error));
-      }, [InvestCard]);
+      }, []);
 
     return (
         <div className="feed__section">
@@ -27,8 +28,8 @@ const TransactionFeed = () => {
             </div>
             {data.map((element) =>             
                 <FeedComponent 
-                    key={element.id.toString()}
-                    transType = {element.transactionType}
+                    key={element.idtransactions}
+                    transType = {element.transactiontype}
                     ticker = {element.ticker}
                     price = {element.price}
                     quantity = {element.quantity}
