@@ -5,10 +5,10 @@ import axios from 'axios';
 
 
     const InvestCard = (props) => {
+    console.log()
     
     
-    
-    const API_URL = 'http://localhost:3500/stockData'
+    const API_URL = process.env.REACT_APP_API_URL
 
     const [quoteTicker, setTicker] = useState('');
     const [quotePrice, setPrice] = useState('');
@@ -28,7 +28,7 @@ import axios from 'axios';
         confirmTicker.style.display = "block"
     
         const ticker = e.target.querySelector('.ticker').value
-        
+        console.log(process.env.REACT_APP_VANTAGE_API_KEY)
         const options = {
             method: 'GET',
             url: 'https://alpha-vantage.p.rapidapi.com/query',
@@ -39,7 +39,7 @@ import axios from 'axios';
             },
             headers: {
               'content-type': 'application/octet-stream',
-              'X-RapidAPI-Key': ProcessingInstruction.env.vantageApiKey,
+              'X-RapidAPI-Key': process.env.REACT_APP_VANTAGE_API_KEY,
               'X-RapidAPI-Host': 'alpha-vantage.p.rapidapi.com'
             }
           }
