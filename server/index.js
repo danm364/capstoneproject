@@ -1,8 +1,10 @@
 const Sequelize = require('sequelize');
+const mysql = require('mysql')
 const express = require('express')
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const transactionRoutes = require("./routes/transactionRoutes")
+
 
 //Express setup
 const app = express()
