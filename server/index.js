@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const express = require('express')
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
+const videoRoutes = require("../routes/transactionRoutes")
 
 //Express setup
 const app = express()
@@ -109,29 +109,16 @@ Transaction.findAll().then((resolve) => {
 })
 
 
+
+
+app.use("/transactions", transactionRoutes);
+
 app.get('/api', (req, res) => {
     hello = {hello: 'world'}
     res.json(hello)
   })
 
-app.post("/addtransaction", (req, res) => {
-    console.log(req.body)
-    data = req.body
-    res.send('Recieved post requst')
-    Transaction.create({ 
-        profile: data.profile,
-        transactiontype: data.transactionType,
-        ticker: data.ticker,
-        price: data.price,
-        quantity: data.quantity,
-        date: data.date
-    })
 
-    // res.json("this has been recieved")
-
-  
-    
-})
 
 app.get("/retrieveTrans", (req, res) => {
     const transactions = Transaction.findAll({
