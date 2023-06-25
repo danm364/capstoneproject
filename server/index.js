@@ -134,7 +134,10 @@ app.post("/addtransaction", (req, res) => {
 })
 
 app.get("/retrieveTrans", (req, res) => {
-    const transactions = Transaction.findAll()
+    const transactions = Transaction.findAll({
+       order: [['idtransactions', 'desc' ]],
+       limit: 10
+    });
     transactions.then((resolve) => {
         res.json(JSON.stringify(resolve))
     }).catch((error) => {

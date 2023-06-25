@@ -4,7 +4,7 @@ import FeedComponent from "./FeedCompnent";
 import InvestCard from "./InvestCard";
 
 
-const TransactionFeed = () => {
+const TransactionFeed = ({quotePrice, setPrice}) => {
     const API_URL = 'http://localhost:3500/stockData'
 
 
@@ -15,7 +15,7 @@ const TransactionFeed = () => {
         //   .then(response => setData(response.data))
             .then(response => setData(JSON.parse(response.data)))
           .catch(error => console.log(error));
-      }, []);
+      }, [quotePrice]);
 
     return (
         <div className="feed__section">
@@ -33,7 +33,7 @@ const TransactionFeed = () => {
                     ticker = {element.ticker}
                     price = {element.price}
                     quantity = {element.quantity}
-                    date = {element.date}
+                    date = {new Date(element.date).toLocaleString()}
                 
                 />
             )}
