@@ -9,13 +9,8 @@ import axios from 'axios';
     
     
     const API_URL = process.env.REACT_APP_API_URL
-
-    
-
     function quoteSetter(e) {
         e.preventDefault()
-        
-        
         
         const confirmPrice = e.target.querySelector(".transaction__price")
         const confirmTicker = e.target.querySelector(".transaction__ticker")
