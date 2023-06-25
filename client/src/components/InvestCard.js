@@ -4,14 +4,13 @@ import axios from 'axios';
 
 
 
-    const InvestCard = (props) => {
+    const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
     console.log()
     
     
     const API_URL = process.env.REACT_APP_API_URL
 
-    const [quoteTicker, setTicker] = useState('');
-    const [quotePrice, setPrice] = useState('');
+    
 
     function quoteSetter(e) {
         e.preventDefault()
@@ -50,19 +49,19 @@ import axios from 'axios';
             
             setTicker(response.data['Global Quote']['01. symbol'])
 
-            if (props.header === 'Sell') {
+            if (header === 'Sell') {
                 let date = new Date()
                 date = date.toLocaleString()
                 axios.post("http://localhost:3500/addtransaction", {
                     profile: 1,
-                    transactionType: props.header,
+                    transactionType: header,
                     ticker: response.data['Global Quote']['01. symbol'],
                     price: response.data['Global Quote']['05. price'],
                     quantity: quantity.value,
                     date: date
                 })
             }
-            else if (props.header === 'Buy') {
+            else if (header === 'Buy') {
                 let date = new Date()
                 date = date.toLocaleString()
                 console.log(date)
@@ -71,7 +70,7 @@ import axios from 'axios';
                 axios.post("http://localhost:3500/addtransaction", {
                     
                     profile: 1,
-                    transactionType: props.header,
+                    transactionType: header,
                     ticker: response.data['Global Quote']['01. symbol'],
                     price: response.data['Global Quote']['05. price'],
                     quantity: quantity.value,
@@ -87,16 +86,13 @@ import axios from 'axios';
             }
             
         })
-    
-    
-    
     }
 
 
     return (
         <div>
             <form action="" className="quote" onSubmit={quoteSetter}>
-            <h1>{props.header}</h1>
+            <h1>{header}</h1>
                 <label htmlFor=""  >Ticker</label>
                 <input type="text" className="ticker" placeholder="Ticker"/>
                 <label htmlFor="" >Quantity</label>
