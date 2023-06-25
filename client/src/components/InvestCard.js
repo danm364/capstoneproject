@@ -1,14 +1,11 @@
 import React from "react";
-import { useEffect, useState } from "react";
+
 import axios from 'axios';
 
 
 
-    const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
-    console.log()
+const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
     
-    
-    const API_URL = process.env.REACT_APP_API_URL
     function quoteSetter(e) {
         e.preventDefault()
         
@@ -39,7 +36,7 @@ import axios from 'axios';
           }
           
         axios(options).then((response) => {
-            console.log(response.data['Global Quote']['01. symbol'])
+            
             setPrice(response.data['Global Quote']['05. price'])
             
             setTicker(response.data['Global Quote']['01. symbol'])
@@ -47,7 +44,7 @@ import axios from 'axios';
             if (header === 'Sell') {
                 let date = new Date()
                 date = date.toLocaleString()
-                axios.post("http://localhost:3500/addtransaction", {
+                axios.post("http://localhost:3500/transactions/sell", {
                     profile: 1,
                     transactionType: header,
                     ticker: response.data['Global Quote']['01. symbol'],
@@ -62,7 +59,7 @@ import axios from 'axios';
                 console.log(date)
                 console.log(quantity.value)
 
-                axios.post("http://localhost:3500/addtransaction", {
+                axios.post("http://localhost:3500/transactions/buy", {
                     
                     profile: 1,
                     transactionType: header,

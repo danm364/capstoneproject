@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import React, { useState } from "react";
 import InvestCard from "./InvestCard";
 import TransactionFeed from "./TransactionsFeed";
 
 
 
-const Invest = ({}) => {
+const Invest = () => {
 
     const [quoteTicker, setQuoteTicker] = useState('');
     const [quotePrice, setQuotePrice] = useState('');

@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const express = require('express')
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const videoRoutes = require("../routes/transactionRoutes")
+const transactionRoutes = require("./routes/transactionRoutes")
 
 //Express setup
 const app = express()
@@ -120,15 +120,3 @@ app.get('/api', (req, res) => {
 
 
 
-app.get("/retrieveTrans", (req, res) => {
-    const transactions = Transaction.findAll({
-       order: [['idtransactions', 'desc' ]],
-       limit: 10
-    });
-    transactions.then((resolve) => {
-        res.json(JSON.stringify(resolve))
-    }).catch((error) => {
-        console.log(error)
-    })
-    // res.send(transactions)
-})

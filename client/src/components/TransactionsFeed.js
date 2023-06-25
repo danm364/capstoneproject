@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
-import FeedComponent from "./FeedCompnent";
-import InvestCard from "./InvestCard";
+import FeedComponent from "./FeedComponent";
+
 
 
 const TransactionFeed = ({quotePrice, setPrice}) => {
-    const API_URL = 'http://localhost:3500/stockData'
+    
 
 
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:3500/retrieveTrans")
+        axios.get("http://localhost:3500/transactions/retrieveTrans")
         //   .then(response => setData(response.data))
             .then(response => setData(JSON.parse(response.data)))
           .catch(error => console.log(error));
