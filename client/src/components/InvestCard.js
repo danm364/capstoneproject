@@ -19,7 +19,7 @@ const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
         confirmTicker.style.display = "block"
     
         const ticker = e.target.querySelector('.ticker').value
-        console.log(process.env.REACT_APP_VANTAGE_API_KEY)
+        
         const options = {
             method: 'GET',
             url: 'https://alpha-vantage.p.rapidapi.com/query',
@@ -48,24 +48,22 @@ const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
                     profile: 1,
                     transactionType: header,
                     ticker: response.data['Global Quote']['01. symbol'],
-                    price: response.data['Global Quote']['05. price'],
-                    quantity: quantity.value,
-                    date: date
+                    price: parseFloat(response.data['Global Quote']['05. price']),
+                    quantity: parseInt(quantity.value),
+                    date: date.toLocaleString()
                 })
             }
             else if (header === 'Buy') {
                 let date = new Date()
-                date = date.toLocaleString()
-                console.log(date)
-                console.log(quantity.value)
+                date = date.toISOString().slice(0, 19).replace('T', ' ');
 
                 axios.post("http://localhost:3500/transactions/buy", {
                     
                     profile: 1,
                     transactionType: header,
                     ticker: response.data['Global Quote']['01. symbol'],
-                    price: response.data['Global Quote']['05. price'],
-                    quantity: quantity.value,
+                    price: parseFloat(response.data['Global Quote']['05. price']),
+                    quantity: parseInt(quantity.value),
                     date: date
                     
                     

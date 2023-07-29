@@ -2,62 +2,50 @@ const Sequelize = require('sequelize');
 const express = require('express');
 const fs = require('fs');
 const router = express.Router();
-
+const pool = require("../database/sqlDb");
 
 router.post("/buy", (req, res) => {
-    console.log(req.body)
     data = req.body
-    res.send('Recieved post requst')
-    Transaction.create({ 
-        profile: data.profile,
-        transactiontype: data.transactionType,
-        ticker: data.ticker,
-        price: data.price,
-        quantity: data.quantity,
-        date: data.date
-    })  
+    console.log(data)
+    values = [[data.profile, data.transactionType, data.ticker, data.price, data.quantity, data.date]]
+
+    let buyRequest = 'INSERT INTO stockgamedata.transactions (profile_id, transactiontype, ticker, price, quantity, date) VALUES ?';
+
+    pool.query(buyRequest, [values], (err, result) => {
+        if (err) 
+        {
+            console.log(err)
+        }
+        else {
+            console.log("1 record inserted")
+            res.send(result)
+        }
+        
+        
+    })
+    
+    
 })
 
 router.post("/sell", (req, res) => {
-    console.log(req.body)
     data = req.body
-    res.send('Recieved post requst')
-    Transaction.create({ 
-        profile: data.profile,
-        transactiontype: data.transactionType,
-        ticker: data.ticker,
-        price: data.price,
-        quantity: data.quantity,
-        date: data.date
-    })  
+    
+    const sellRequest = `INSERT INTO stockgamedata.transactions (profile, transactionType, ticker, price, quantity, date) 
+    VALUES (${data.profile}, ${data.transactionType}, ${data.ticker}, ${data.price}, ${data.quantity}, ${data.date}) `
+
+    pool.execute("select * from stockgamedata.transactions", function (err, result) {
+            if (err) throw err;
+        
+            console.log(result)
+        })
+
+    res.send('Received post request')
 })
 
-router.post("/quote", (req, res) => {
-    console.log(req.body)
-    data = req.body
-    res.send('Recieved post requst')
-    Transaction.create({ 
-        profile: data.profile,
-        transactiontype: data.transactionType,
-        ticker: data.ticker,
-        price: data.price,
-        quantity: data.quantity,
-        date: data.date
-    })  
-})
 
 
 router.get("/retrieveTrans", (req, res) => {
-    const transactions = Transaction.findAll({
-       order: [['idtransactions', 'desc' ]],
-       limit: 10
-    });
-    transactions.then((resolve) => {
-        console.log(res)
-        res.json(JSON.stringify(resolve))
-    }).catch((error) => {
-        console.log(error)
-    })
+    
     // res.send(transactions)
 })
 
