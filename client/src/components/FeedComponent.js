@@ -3,21 +3,21 @@
 
 
 
-const FeedComponent = (props) => {
+const FeedComponent = ({transType, ticker, price, quantity, date, setRefreshKey}) => {
 
-    
 
     return (
-       
+       (ticker && quantity) && (
             <div className="feed__cols">
-                <div>{props.transType}</div>
-                <div>{props.ticker}</div>
-                <div>{props.price}</div>
-                <div>{props.quantity}</div>
-                <div>{props.date}</div>
+                <div>{transType}</div>
+                <div>{ticker}</div>
+                <div>{price}</div>
+                <div>{quantity}</div>
+                <div>{date}</div>
             </div>
             
-            
+       ) 
+       
     )
 }
 

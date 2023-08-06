@@ -43,7 +43,7 @@ const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
 
             if (header === 'Sell') {
                 let date = new Date()
-                date = date.toLocaleString()
+                date = date.toISOString().slice(0, 19).replace('T', ' ');
                 axios.post("http://localhost:3500/transactions/sell", {
                     profile: 1,
                     transactionType: header,

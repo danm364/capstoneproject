@@ -9,13 +9,13 @@ const TransactionFeed = ({quotePrice, setPrice}) => {
 
 
     const [data, setData] = useState([]);
+    
 
     useEffect(() => {
         axios.get("http://localhost:3500/transactions/retrieveTrans")
-        //   .then(response => setData(response.data))
             .then(response => setData(JSON.parse(response.data)))
           .catch(error => console.log(error));
-      }, [quotePrice]);
+      }, [data[0]]);
 
     return (
         <div className="feed__section">
@@ -26,16 +26,20 @@ const TransactionFeed = ({quotePrice, setPrice}) => {
                 <div>Quantity</div>
                 <div>Date</div>
             </div>
-            {data.map((element) =>             
+            {data.map((element) =>   
+            
+           
                 <FeedComponent 
-                    key={element.idtransactions}
-                    transType = {element.transactiontype}
+                    key={element.transaction_id}
+                    transType = {element.transactionType}
                     ticker = {element.ticker}
                     price = {element.price}
                     quantity = {element.quantity}
                     date = {new Date(element.date).toLocaleString()}
+                    
                 
                 />
+            
             )}
             
             

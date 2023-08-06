@@ -9,7 +9,7 @@ router.post("/buy", (req, res) => {
     console.log(data)
     values = [[data.profile, data.transactionType, data.ticker, data.price, data.quantity, data.date]]
 
-    let buyRequest = 'INSERT INTO stockgamedata.transactions (profile_id, transactiontype, ticker, price, quantity, date) VALUES ?';
+    let buyRequest = 'INSERT INTO stockgamedata.transactions (profile_id, transactionType, ticker, price, quantity, date) VALUES ?';
 
     pool.query(buyRequest, [values], (err, result) => {
         if (err) 
@@ -29,11 +29,12 @@ router.post("/buy", (req, res) => {
 
 router.post("/sell", (req, res) => {
     data = req.body
+    values = [[data.profile, data.transactionType, data.ticker, data.price, data.quantity, data.date]]
     
-    const sellRequest = `INSERT INTO stockgamedata.transactions (profile, transactionType, ticker, price, quantity, date) 
-    VALUES (${data.profile}, ${data.transactionType}, ${data.ticker}, ${data.price}, ${data.quantity}, ${data.date}) `
+    const sellRequest = 'INSERT INTO stockgamedata.transactions (profile_id, transactionType, ticker, price, quantity, date) VALUES ?'; 
+    
 
-    pool.execute("select * from stockgamedata.transactions", function (err, result) {
+    pool.query(sellRequest, [values], (err, result) => {
             if (err) throw err;
         
             console.log(result)
@@ -45,8 +46,16 @@ router.post("/sell", (req, res) => {
 
 
 router.get("/retrieveTrans", (req, res) => {
-    
-    // res.send(transactions)
+  
+
+    const retrieveRequest = "SELECT transaction_id, transactionType, ticker, price, quantity, date FROM stockgamedata.transactions"
+
+    pool.query(retrieveRequest, (err, result) => {
+        if (err) throw err;
+        result = JSON.stringify(result)
+        console.log(result)
+        res.json(result)
+    })
 })
 
 module.exports = router;
