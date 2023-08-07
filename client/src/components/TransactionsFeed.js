@@ -4,7 +4,7 @@ import FeedComponent from "./FeedComponent";
 
 
 
-const TransactionFeed = ({quotePrice, setPrice}) => {
+const TransactionFeed = ({quotePrice, sellPrice, buyPrice}) => {
     
 
 
@@ -15,7 +15,8 @@ const TransactionFeed = ({quotePrice, setPrice}) => {
         axios.get("http://localhost:3500/transactions/retrieveTrans")
             .then(response => setData(JSON.parse(response.data)))
           .catch(error => console.log(error));
-      }, [data[0]]);
+          console.log(data[0])
+      }, [quotePrice,sellPrice,buyPrice]);
 
     return (
         <div className="feed__section">
