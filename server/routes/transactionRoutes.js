@@ -48,9 +48,9 @@ router.post("/sell", (req, res) => {
 router.get("/retrieveTrans", (req, res) => {
   
 
-    const retrieveRequest = "SELECT transaction_id, transactionType, ticker, price, quantity, date FROM stockgamedata.transactions"
+    const retrieveRequest = "SELECT transaction_id, transactionType, ticker, price, quantity, date FROM stockgamedata.transactions ORDER BY date DESC LIMIT ?"
 
-    pool.query(retrieveRequest, (err, result) => {
+    pool.query(retrieveRequest, [15], (err, result) => {
         if (err) throw err;
         result = JSON.stringify(result)
         console.log(result)

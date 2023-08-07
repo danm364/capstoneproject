@@ -81,12 +81,12 @@ const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
 
     return (
         <div>
-            <form action="" className="quote" onSubmit={quoteSetter}>
+            <form action="" className="invest__card" onSubmit={quoteSetter}>
             <h1>{header}</h1>
-                <label htmlFor=""  >Ticker</label>
-                <input type="text" className="ticker" placeholder="Ticker"/>
-                <label htmlFor="" >Quantity</label>
-                <input type="text" className="quantity" placeholder="Quantity" />
+                <label htmlFor=""  >Enter Ticker</label>
+                <input type="text" className="invest__ticker" placeholder="Ticker"/>
+                <label htmlFor="" >Enter Quantity</label>
+                <input type="text" className="invest__quantity" placeholder="Quantity" />
                 <button type="submit" >Submit</button>
                 <div className="transaction__ticker">{quoteTicker}</div>
                 <div className="transaction__price">{quotePrice}</div>
