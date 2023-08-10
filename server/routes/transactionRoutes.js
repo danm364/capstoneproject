@@ -1,6 +1,4 @@
-const Sequelize = require('sequelize');
 const express = require('express');
-const fs = require('fs');
 const router = express.Router();
 const pool = require("../database/sqlDb");
 
@@ -37,7 +35,7 @@ router.post("/sell", (req, res) => {
     pool.query(sellRequest, [values], (err, result) => {
             if (err) throw err;
         
-            console.log(result)
+            
         })
 
     res.send('Received post request')
@@ -53,7 +51,7 @@ router.get("/retrieveTrans", (req, res) => {
     pool.query(retrieveRequest, [15], (err, result) => {
         if (err) throw err;
         result = JSON.stringify(result)
-        console.log(result)
+
         res.json(result)
     })
 })

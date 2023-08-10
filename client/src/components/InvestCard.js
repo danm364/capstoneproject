@@ -1,5 +1,4 @@
 import React from "react";
-
 import axios from 'axios';
 
 
@@ -12,13 +11,13 @@ const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
         const confirmPrice = e.target.querySelector(".transaction__price")
         const confirmTicker = e.target.querySelector(".transaction__ticker")
 
-        let quantity = e.target.querySelector(".quantity")
+        let quantity = e.target.querySelector(".invest__quantity")
         
     
         confirmPrice.style.display = "block"
         confirmTicker.style.display = "block"
     
-        const ticker = e.target.querySelector('.ticker').value
+        const ticker = e.target.querySelector('.invest__ticker').value
         
         const options = {
             method: 'GET',

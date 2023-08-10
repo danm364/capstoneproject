@@ -1,58 +1,50 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useEffect } from "react";
 
 
 
 
 const Holdings = () => {
 
-    const [stocks, setStock] = useState(
-    [
-        {
-            id: "1",
-            ticker: "AAPL",
-            price: "90",
-            marketValue: "1000"
-        },
+    const [stocks, setStocks] = useState([])
 
-        {
-            id: "2",
-            ticker: "AAPL",
-            price: "90",
-            marketValue: "1000"
-        },
+    useEffect(() => {
+        axios.get("http://localhost:3500/holdings/selectHoldings")
+            .then((response) => {
 
-        {
-            id: "3",
-            ticker: "GOOGL",
-            price: "90",
-            marketValue: "1000"
-        },
+                response = JSON.parse(response.data)
+                console.log(response)
+                setStocks(response)
 
-        {
-            id: "4",
-            ticker: "PLTR",
-            price: "90",
-            marketValue: "1000"
-        }
-        ,
-        {
-            id: "5",
-            ticker: "MSFT",
-            price: "90",
-            marketValue: "1000"
-        }
-    ]);
+             
+                   
+                }
+            )
+            
+            .catch(error => console.log(error));
+
+    }, [])
+
+    
+
 
     return (
-
+        
         <ul className="portfolio__list" >
-            {stocks.map((stock) => (
-                <li className="portfolio__headers" key={stock.id}> 
-                        <div>{stock.ticker}</div>
-                        <div>{stock.price}</div>
-                        <div>{stock.marketValue}</div>
-                </li>
-            ))}
+             {console.log(stocks)}
+                
+                {stocks && stocks.map((stock, index) => 
+                <li className="portfolio__headers" key={index} > 
+                    <div>{stock.ticker}</div>
+                    <div>{stock.price}</div>
+                    <div>{stock.marketValue}</div>
+                </li>  
+                )
+                        
+                }
+                
+            
             
         </ul>
                 
