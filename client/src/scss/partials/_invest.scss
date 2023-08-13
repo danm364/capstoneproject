@@ -39,7 +39,11 @@
         min-width: 300px;
         min-height: 550px;
         border-radius: 20px;
-        box-shadow: 10px 5px 5px $primary-color;
+        
+        &:hover {
+            box-shadow: 10px 5px 5px $primary-color;
+            
+        }
 
         & input{
             padding-right: 10px;
