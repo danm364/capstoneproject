@@ -46,7 +46,7 @@
 .pricing {
   display: flex;
   flex-direction: row;
-  background-color: #116466;
+  background-color: #1F2833;
   -moz-column-gap: 50px;
        column-gap: 50px;
   row-gap: 100px;
@@ -59,15 +59,35 @@
 }
 .pricing__card {
   border: 5px solid #2c3531;
-  background-color: #1F2833;
+  background-color: white;
   width: 80%;
   max-width: 350px;
   text-align: center;
   display: flex;
   flex-direction: column;
+  border-radius: 10px;
+  transition: transform 2s ease, box-shadow 1.5s ease, background-color 1.5s ease, border-color 1.5s ease;
+}
+.pricing__card:first-child:hover {
+  box-shadow: 0 0 50px 15px #cd8c32;
+}
+.pricing__card:last-child:hover {
+  box-shadow: 0 0 50px 15px rgb(122, 104, 2);
+}
+.pricing__card:nth-child(2):hover {
+  box-shadow: 0 0 50px 15px silver;
+}
+.pricing__card:hover {
+  background-color: #1F2833;
+  border-color: white;
+  box-shadow: 0 0 50px 15px #116466;
+  transform: scale(1.1);
+}
+.pricing__card:hover * {
+  color: white;
 }
 .pricing__card * {
-  color: white;
+  color: #2c3531;
 }
 .pricing__btn {
   width: 20%;
@@ -75,6 +95,11 @@
   border-radius: 2px;
   color: white;
   background-color: #116466;
+  background: transparent;
+  color: #116466;
+  border: transparent;
+  font-size: 1rem;
+  font-weight: bold;
 }
 .pricing__info-list {
   list-style: none;
@@ -199,6 +224,7 @@
 .portfolio__headers {
   display: flex;
   width: 40vw;
+  border-bottom: white;
 }
 .portfolio__headers * {
   flex: 33%;
@@ -238,6 +264,8 @@
   min-width: 300px;
   min-height: 550px;
   border-radius: 20px;
+}
+.invest__card:hover {
   box-shadow: 10px 5px 5px #116466;
 }
 .invest__card input {

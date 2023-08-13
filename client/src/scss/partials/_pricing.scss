@@ -3,7 +3,7 @@
 .pricing {
     display: flex;
     flex-direction: row;
-    background-color: $primary-color;
+    background-color: $primary-bg;
     column-gap: 50px;
     row-gap: 100px;
     align-items: flex-start;
@@ -12,23 +12,49 @@
     height: 100vh;
     padding-top: 100px;
     padding-bottom: 50px;
+
     
 
     &__card {
+        
+        &:first-child:hover {
+            box-shadow: 0 0 50px 15px $bronze-card;
+        }
+        &:last-child:hover {
+            box-shadow: 0 0 50px 15px rgb(122, 104, 2);
+        }
+
+        &:nth-child(2):hover {
+            box-shadow: 0 0 50px 15px silver;
+        }
         border: 5px solid $secondary-color;
-        background-color: $primary-bg;
+        background-color: $white-text;
         width: 80%;
         max-width: 350px;
         text-align: center;
         display: flex;
         flex-direction: column;
+        border-radius: 10px;
+        transition: transform 2s ease, box-shadow 1.5s ease, background-color 1.5s ease, border-color 1.5s ease;
+
+        &:hover {
+            background-color: $primary-bg;
+            border-color: $white-text;
+            box-shadow: 0 0 50px 15px $primary-color;
+            transform: scale(1.1);
+
+            & * {
+            
+                color: $white-text;
+            }
       
-        & * {
-            color: $white-text;
         }
         
-       
       
+        & * {
+            color: $secondary-color;
+        }
+        
     }
 
     &__btn{
@@ -37,6 +63,11 @@
         border-radius: 2px;
         color: $white-text;
         background-color: $primary-color;
+        background: transparent;
+        color: $primary-color;
+        border: transparent;
+        font-size: 1rem;
+        font-weight: bold;
 
     }
 
