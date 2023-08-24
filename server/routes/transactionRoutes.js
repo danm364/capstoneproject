@@ -3,42 +3,66 @@ const router = express.Router();
 const pool = require("../database/sqlDb");
 
 router.post("/buy", (req, res) => {
+
     data = req.body
-    console.log(data)
-    values = [[data.profile, data.transactionType, data.ticker, data.price, data.quantity, data.date]]
 
-    let buyRequest = 'INSERT INTO stockgamedata.transactions (profile_id, transactionType, ticker, price, quantity, date) VALUES ?';
-
-    pool.query(buyRequest, [values], (err, result) => {
+    pool.query("SELECT security_id FROM security WHERE symbol = ?", [data.ticker], (err, result) => {
         if (err) 
         {
             console.log(err)
         }
         else {
-            console.log("1 record inserted")
-            res.send(result)
+            let secID = result[0].security_id
+
+            values = [[data.profile, data.transactionType, secID, data.price, data.quantity, data.date]]
+
+            let buyRequest = 'INSERT INTO stockgamedata.transactions (profile_id, transactionType, security_id, price, quantity, transaction_date) VALUES ?';
+
+            pool.query(buyRequest, [values], (err, result) => {
+                if (err) 
+                {
+                    console.log(err)
+                }
+                else {
+                    console.log("1 record inserted")
+                    res.send(result)
+                }
+            })
         }
-        
-        
     })
+
+    
     
     
 })
 
 router.post("/sell", (req, res) => {
     data = req.body
-    values = [[data.profile, data.transactionType, data.ticker, data.price, data.quantity, data.date]]
+   
     
-    const sellRequest = 'INSERT INTO stockgamedata.transactions (profile_id, transactionType, ticker, price, quantity, date) VALUES ?'; 
-    
+    pool.query("SELECT security_id FROM security WHERE symbol = ?", [data.ticker], (err, result) => {
 
-    pool.query(sellRequest, [values], (err, result) => {
-            if (err) throw err;
-        
+        if (err) 
+        {
+            console.log(err)
+        }
+        else {
+            let secID = result[0].security_id
+
+            values = [[data.profile, data.transactionType, secID, data.price, data.quantity, data.date]]
+    
+            const sellRequest = 'INSERT INTO stockgamedata.transactions (profile_id, transactionType, security_id, price, quantity, transaction_date) VALUES ?'; 
             
-        })
-
-    res.send('Received post request')
+            pool.query(sellRequest, [values], (err, result) => {
+                if (err) throw err;
+            
+                
+            })
+    
+            res.send('Received post request')
+        }
+    })
+ 
 })
 
 
@@ -46,10 +70,11 @@ router.post("/sell", (req, res) => {
 router.get("/retrieveTrans", (req, res) => {
   
 
-    const retrieveRequest = "SELECT transaction_id, transactionType, ticker, price, quantity, date FROM stockgamedata.transactions ORDER BY date DESC LIMIT ?"
+    const retrieveRequest = "SELECT T.transaction_id, T.transactionType, S.symbol, T.price, T.quantity, T.transaction_date FROM stockgamedata.transactions T INNER JOIN security S ON T.security_id = S.security_id ORDER BY transaction_date DESC LIMIT ?"
 
     pool.query(retrieveRequest, [15], (err, result) => {
         if (err) throw err;
+
         result = JSON.stringify(result)
 
         res.json(result)

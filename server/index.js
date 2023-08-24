@@ -13,6 +13,8 @@ const app = express()
 app.use(bodyParser.json());
 const port = 3500
 app.use(cors());
+require('dotenv').config();
+
 
 
 app.listen(port, () => {
