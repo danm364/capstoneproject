@@ -4,7 +4,7 @@
 
 
 const FeedComponent = ({transType, ticker, price, quantity, date, setRefreshKey}) => {
-
+    console.log(ticker)
 
     return (
        (ticker && quantity) && (
