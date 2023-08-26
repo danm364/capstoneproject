@@ -17,8 +17,7 @@ const Holdings = () => {
                 console.log(response)
                 setStocks(response)
 
-             
-                   
+  
                 }
             )
             
