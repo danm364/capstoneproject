@@ -24,6 +24,10 @@ router.post("/buy", (req, res) => {
                     console.log(err)
                 }
                 else {
+                    result = {
+                        ticker: data.ticker,
+                        price: data.price
+                    }
                     console.log("1 record inserted")
                     res.send(result)
                 }
@@ -58,8 +62,13 @@ router.post("/sell", (req, res) => {
             
                 
             })
+
+            result = {
+                ticker: data.ticker,
+                price: data.price
+            }
     
-            res.send('Received post request')
+            res.send(result)
         }
     })
  

@@ -1,9 +1,9 @@
 import React from "react";
 import axios from 'axios';
+import dateFormatter from "dateformat";
 
 
-
-const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
+const InvestCard = ({quotePrice, quoteTicker, setSellPrice, setSellTicker, header, setBuyPrice, setBuyTicker}) => {
     
     function quoteSetter(e) {
         e.preventDefault()
@@ -36,13 +36,13 @@ const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
           
         axios(options).then((response) => {
             
-            setPrice(response.data['Global Quote']['05. price'])
             
-            setTicker(response.data['Global Quote']['01. symbol'])
 
             if (header === 'Sell') {
-                let date = new Date()
-                date = date.toISOString().slice(0, 19).replace('T', ' ');
+                let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
+
+                console.log(date)
+                
                 axios.post("http://localhost:3500/transactions/sell", {
                     profile: 1,
                     transactionType: header,
@@ -50,11 +50,15 @@ const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
                     price: parseFloat(response.data['Global Quote']['05. price']),
                     quantity: parseInt(quantity.value),
                     date: date.toLocaleString()
+                }).then((response,err) => {
+                    setSellPrice(response.data.price)
+                    setSellTicker(response.data.ticker)
                 })
             }
             else if (header === 'Buy') {
-                let date = new Date()
-                date = date.toISOString().slice(0, 19).replace('T', ' ');
+                let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
+
+                console.log(response.data)
 
                 axios.post("http://localhost:3500/transactions/buy", {
                     
@@ -67,7 +71,10 @@ const InvestCard = ({quotePrice, quoteTicker, setPrice, setTicker, header}) => {
                     
                     
                 }).then((response) => {
-                    console.log(response)
+
+                    setBuyPrice(response.data.price)
+                    setBuyTicker(response.data.ticker)
+
                 }).catch((error) => {
                     console.log(error)
                 })

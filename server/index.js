@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const mysql = require('mysql2')
 const express = require('express')
 const cors = require('cors');

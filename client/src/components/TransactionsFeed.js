@@ -4,7 +4,7 @@ import FeedComponent from "./FeedComponent";
 
 
 
-const TransactionFeed = ({quotePrice, sellPrice, buyPrice}) => {
+const TransactionFeed = ({buyTicker, sellPrice, buyPrice}) => {
     
 
 
@@ -12,16 +12,18 @@ const TransactionFeed = ({quotePrice, sellPrice, buyPrice}) => {
     
 
     useEffect(() => {
+
         axios.get("http://localhost:3500/transactions/retrieveTrans")
-            .then(response => {
+        .then(response => {
 
-                setData(JSON.parse(response.data))
-            })
-          .catch(error => console.log(error));
+            setData(JSON.parse(response.data))
 
-      }, [quotePrice,sellPrice,buyPrice]);
+        })
+        .catch(error => console.log(error));
+       
+        
 
-      console.log(data)
+      }, [buyTicker, sellPrice, buyPrice]);
 
     return (
         <div className="feed__section">
