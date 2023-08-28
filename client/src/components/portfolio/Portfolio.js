@@ -19,9 +19,6 @@ const Portfolio = () => {
                     <div>Market Value</div>
                 </div>
                 < Holdings />
-                
-                
-
             </div>
         </div>
 

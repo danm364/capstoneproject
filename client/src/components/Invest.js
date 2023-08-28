@@ -23,7 +23,7 @@ const Invest = () => {
             <main className="invest__container">
                 <InvestCard header="Buy" setBuyTicker= {setBuyTicker} setBuyPrice ={setBuyPrice} quotePrice={buyPrice} quoteTicker={buyTicker}/>
                 <InvestCard header="Sell"setSellTicker= {setSellTicker} setSellPrice ={setSellPrice} quotePrice={sellPrice} quoteTicker={sellTicker}/>
-                <InvestCard header="Quote"setTicker= {setQuoteTicker} setPrice ={setQuotePrice} quotePrice={quotePrice} quoteTicker={quoteTicker}/>
+                <InvestCard header="Quote"setQuoteTicker= {setQuoteTicker} setQuotePrice ={setQuotePrice} quotePrice={quotePrice} quoteTicker={quoteTicker}/>
                 
             </main>
             <section className="feed">

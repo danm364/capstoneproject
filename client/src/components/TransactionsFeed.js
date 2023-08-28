@@ -20,8 +20,6 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice}) => {
 
         })
         .catch(error => console.log(error));
-       
-        
 
       }, [buyTicker, sellPrice, buyPrice]);
 
@@ -43,13 +41,9 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice}) => {
                     price = {element.price}
                     quantity = {element.quantity}
                     date = {new Date(element.transaction_date).toLocaleString()}
-                    
-                
                 />
             
             )}
-            
-            
         </div>
     )
 }

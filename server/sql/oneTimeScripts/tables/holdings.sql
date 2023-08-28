@@ -1,16 +1,17 @@
 DROP TABLE IF EXISTS holdings;
 
 CREATE TABLE holdings (
-    holdings_id INT PRIMARY KEY NOT NULL,
+    holdings_id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     profile_id INT NOT NULL,
     security_id INT NOT NULL,
-    quantity INT NOT NULL,
-    FOREIGN KEY (profile_id) REFERENCES profiles(profile_id)
+    securityMarketValue DECIMAL(10, 2) NOT NULL,
+    holdings_date DATETIME NOT NULL,
+    FOREIGN KEY (profile_id) REFERENCES profiles(profile_id),
+    FOREIGN KEY (security_id) REFERENCES security(security_id)
     
-
 );
 
-FOREIGN KEY (security_id) REFERENCES stocks(security_id)
+FOREIGN KEY (security_id) REFERENCES security(security_id)
 
 ALTER TABLE holdings
 ADD FOREIGN KEY (security_id) REFERENCES security(security_id);

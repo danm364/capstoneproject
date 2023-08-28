@@ -8,9 +8,8 @@ function roundToX(num, X) {
 }
 
 router.get("/selectHoldings", (req, res) => {
-  
-
-    const retrieveRequest = "SELECT ticker, SUM(quantity) quantity FROM stockgamedata.transactions GROUP BY ticker "
+    
+    const retrieveRequest = "SELECT S.symbol ticker, (SUM(T.quantity) - (SELECT SUM(T.quantity) quantity FROM stockgamedata.transactions T INNER JOIN security S ON T.security_id = S.security_id WHERE transactionType = 'SELL' GROUP BY ticker) ) quantity, ROUND(AVG(T.price),2) cost FROM stockgamedata.transactions T INNER JOIN security S ON T.security_id = S.security_id WHERE transactionType = 'BUY' GROUP BY ticker "
 
     pool.query(retrieveRequest, async (err, result) => {
         if (err) throw err;
@@ -35,13 +34,11 @@ router.get("/selectHoldings", (req, res) => {
                     }
                   }
                 
-                
                 apiPromises.push(axios(options))
                 i++;
-                
-
 
         }
+
         await Promise.all(apiPromises).then((resolve,reject) => {
 
             resolve.forEach((element) => {
@@ -56,16 +53,25 @@ router.get("/selectHoldings", (req, res) => {
             })
             
         })
-        
-        console.log(result)
-        
-        
 
-
-        result = JSON.stringify(result)
-        
+        result = JSON.stringify(result)        
         res.json(result)
     })
 })
+
+
+retrieveEndOfDayHoldings = "SELECT S.symbol ticker, SUM(T.quantity) quantity, ROUND(AVG(T.price),2) cost, DATE(T.transaction_date) date FROM stockgamedata.transactions T INNER JOIN security S ON T.security_id = S.security_id GROUP BY S.symbol, DATE(T.transaction_date) "
+
+// pool.query(retrieveRequest, async (err, result) => {
+//     if (err) throw err;
+
+//     let i = 0
+
+//     let apiPromises = []
+
+    
+
+    
+// })
 
 module.exports = router;

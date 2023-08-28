@@ -3,7 +3,7 @@ import axios from 'axios';
 import dateFormatter from "dateformat";
 
 
-const InvestCard = ({quotePrice, quoteTicker, setSellPrice, setSellTicker, header, setBuyPrice, setBuyTicker}) => {
+const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, setSellPrice, setSellTicker, header, setBuyPrice, setBuyTicker}) => {
     
     function quoteSetter(e) {
         e.preventDefault()
@@ -35,8 +35,6 @@ const InvestCard = ({quotePrice, quoteTicker, setSellPrice, setSellTicker, heade
           }
           
         axios(options).then((response) => {
-            
-            
 
             if (header === 'Sell') {
                 let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
@@ -79,6 +77,14 @@ const InvestCard = ({quotePrice, quoteTicker, setSellPrice, setSellTicker, heade
                     console.log(error)
                 })
             
+            }
+            else if (header === 'Quote') {
+                
+
+                console.log(response.data)
+
+                setQuotePrice(response.data['Global Quote']['05. price'])
+                setQuoteTicker(response.data['Global Quote']['01. symbol'])
             }
             
         })
