@@ -34,10 +34,6 @@ router.post("/buy", (req, res) => {
             })
         }
     })
-
-    
-    
-    
 })
 
 router.post("/sell", (req, res) => {
@@ -51,6 +47,7 @@ router.post("/sell", (req, res) => {
             console.log(err)
         }
         else {
+            console.log(result[0].security_id)
             let secID = result[0].security_id
 
             values = [[data.profile, data.transactionType, secID, data.price, data.quantity, data.date]]
@@ -73,8 +70,6 @@ router.post("/sell", (req, res) => {
     })
  
 })
-
-
 
 router.get("/retrieveTrans", (req, res) => {
   

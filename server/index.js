@@ -7,6 +7,7 @@ const transactionRoutes = require("./routes/transactionRoutes")
 const holdingsRoutes = require("./routes/holdingsRoutes")
 const database = require ("./database/sqlDb")
 
+
 //Express setup
 const app = express()
 app.use(bodyParser.json());
@@ -19,6 +20,8 @@ require('dotenv').config();
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
+
+
 
 
 

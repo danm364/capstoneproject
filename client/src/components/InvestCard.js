@@ -3,7 +3,9 @@ import axios from 'axios';
 import dateFormatter from "dateformat";
 
 
-const InvestCard = ({quotePrice, quoteTicker, setSellPrice, setSellTicker, header, setBuyPrice, setBuyTicker}) => {
+const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, setSellPrice, setSellTicker, header, setBuyPrice, setBuyTicker}) => {
+
+    let host = "http://localhost:3500"
     
     function quoteSetter(e) {
         e.preventDefault()
@@ -35,15 +37,13 @@ const InvestCard = ({quotePrice, quoteTicker, setSellPrice, setSellTicker, heade
           }
           
         axios(options).then((response) => {
-            
-            
 
             if (header === 'Sell') {
                 let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
 
                 console.log(date)
                 
-                axios.post("http://localhost:3500/transactions/sell", {
+                axios.post(`${process.env.REACT_HOST}/transactions/sell`, {
                     profile: 1,
                     transactionType: header,
                     ticker: response.data['Global Quote']['01. symbol'],
@@ -60,7 +60,7 @@ const InvestCard = ({quotePrice, quoteTicker, setSellPrice, setSellTicker, heade
 
                 console.log(response.data)
 
-                axios.post("http://localhost:3500/transactions/buy", {
+                axios.post(`${process.env.REACT_HOST}/transactions/buy`, {
                     
                     profile: 1,
                     transactionType: header,
@@ -79,6 +79,14 @@ const InvestCard = ({quotePrice, quoteTicker, setSellPrice, setSellTicker, heade
                     console.log(error)
                 })
             
+            }
+            else if (header === 'Quote') {
+                
+
+                console.log(response.data)
+
+                setQuotePrice(response.data['Global Quote']['05. price'])
+                setQuoteTicker(response.data['Global Quote']['01. symbol'])
             }
             
         })
