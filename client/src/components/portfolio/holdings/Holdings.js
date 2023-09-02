@@ -1,37 +1,12 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useEffect } from "react";
+import React from "react";
 
+const Holdings = ({stocks}) => {
 
-
-
-const Holdings = () => {
-
-    const [stocks, setStocks] = useState([])
-
-    useEffect(() => {
-
-        try {
-        axios.get("http://localhost:3500/holdings/selectHoldings")
-            .then((response) => {
-                
-                response = JSON.parse(response.data)
-                setStocks(response)
-
-                }
-            )
-            
-            .catch(error => console.log(error));
-        }
-        catch {
-            setStocks(null)
-        }
-    }, [])
+    
 
     return (
         
-        <ul className="portfolio__list" >
-                
+        <ul className="portfolio__list" >            
                 {stocks && stocks.map((stock, index) => 
                 <li className="portfolio__headers" key={index} > 
                     <div>{stock.ticker}</div>
@@ -39,7 +14,6 @@ const Holdings = () => {
                     <div>{stock.marketValue}</div>
                 </li>  
                 )}
-
         </ul>
                 
     )

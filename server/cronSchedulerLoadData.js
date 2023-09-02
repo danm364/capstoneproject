@@ -109,8 +109,9 @@ cron.schedule('0 0 18 * * 1-5', () => {
             })
         }
     
-}, {
+})}, 
+{
     scheduled: true,
     timezone: "America/New_York"
   });
-})
+

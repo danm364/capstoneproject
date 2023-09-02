@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require("../database/sqlDb");
 const axios = require("axios")
 
-router.get("/selectHoldings", (req, res) => {
+router.get("/loginValidation", (req, res) => {
     
     // const retrieveRequest = "SELECT MAX(S.security_id) SecID ,S.symbol ticker, (SUM(T.quantity) - (SELECT SUM(T.quantity) \
     // quantity FROM stockgamedata.transactions T INNER JOIN security S ON T.security_id = S.security_id \
@@ -22,20 +22,3 @@ router.get("/selectHoldings", (req, res) => {
     })
 
 })
-
-
-// retrieveEndOfDayHoldings = "SELECT S.symbol ticker, SUM(T.quantity) quantity, ROUND(AVG(T.price),2) cost, DATE(T.transaction_date) date FROM stockgamedata.transactions T INNER JOIN security S ON T.security_id = S.security_id GROUP BY S.symbol, DATE(T.transaction_date) "
-
-// pool.query(retrieveRequest, async (err, result) => {
-//     if (err) throw err;
-
-//     let i = 0
-
-//     let apiPromises = []
-
-    
-
-    
-// })
-
-module.exports = router;

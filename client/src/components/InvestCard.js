@@ -4,6 +4,8 @@ import dateFormatter from "dateformat";
 
 
 const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, setSellPrice, setSellTicker, header, setBuyPrice, setBuyTicker}) => {
+
+    let host = "http://localhost:3500"
     
     function quoteSetter(e) {
         e.preventDefault()
@@ -41,7 +43,7 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
 
                 console.log(date)
                 
-                axios.post("http://localhost:3500/transactions/sell", {
+                axios.post(`${process.env.REACT_HOST}/transactions/sell`, {
                     profile: 1,
                     transactionType: header,
                     ticker: response.data['Global Quote']['01. symbol'],
@@ -58,7 +60,7 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
 
                 console.log(response.data)
 
-                axios.post("http://localhost:3500/transactions/buy", {
+                axios.post(`${process.env.REACT_HOST}/transactions/buy`, {
                     
                     profile: 1,
                     transactionType: header,
