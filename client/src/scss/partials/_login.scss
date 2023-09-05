@@ -66,6 +66,8 @@
     &__checkbox {
         width: fit-content;
         margin: 0;
+        accent-color: $primary-color;
+        
     }
 
     &__forgot {
@@ -87,9 +89,38 @@
         }
     }
 
+
+    &__error-msg {
+        display: none;
+        color: red;
+        position: absolute;
+        top: -30px;
+        left: 0;
+    }
    
+    &__username {
+        position: relative;
+    }
+
+    &__register {
+
+        & a {
+            list-style: none;
+            text-decoration: none;
+            color: $primary-color;
+            font-weight: 700;
+
+            &:visited, &:active {
+                color: $primary-color;
+                
+            }
+        }
+        
+    }
 
 }
+
+
 
 .flex-column {
     display: flex;

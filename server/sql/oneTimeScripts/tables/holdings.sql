@@ -15,6 +15,10 @@ FOREIGN KEY (security_id) REFERENCES security(security_id)
 
 ALTER TABLE holdings
 ADD FOREIGN KEY (security_id) REFERENCES security(security_id);
+
+
+ALTER TABLE holdings
+ADD FOREIGN KEY (profile_id) REFERENCES profiles(profile_id);
 --remove foreign key
 ALTER TABLE holdings
 DROP CONSTRAINT holdings_ibfk_1;

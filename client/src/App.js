@@ -4,9 +4,14 @@ import Login from './components/Login';
 import Pricing from './components/Pricing';
 import Portfolio from './components/portfolio/Portfolio';
 import Invest from './components/Invest';
-import {Routes, Route, Link} from 'react-router-dom';
+import RegisterAccount from './components/RegisterAccount'
+import {Routes, Route, Link, Navigate} from 'react-router-dom';
 
 function App() {
+
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [currentAccount, setCurrentAccount] = useState(0)
+
   return (
     <div className="App">
       <nav className='nav'>
@@ -17,15 +22,19 @@ function App() {
               <li className="navbar__item ">
                 <Link to="/invest" className="navbar__btn" >Invest</Link>
                 <Link to="/portfolio" className="navbar__btn" >Portfolio</Link>
-                <Link to="/login" className="navbar__btn" >Login</Link>
+                { loggedIn === false ? (<Link to="/login" className="navbar__btn" >Login</Link>)
+                : (<Link onClick={() => setLoggedIn(!loggedIn)} className="navbar__btn"> Logout</Link>)
+                
+                }
               </li>
           </ul>
       </nav>
       <Routes>
         <Route path="/" element={<Pricing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/invest" element={<Invest />} />
-        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/login" element={loggedIn === false ? <Login setCurrentAccount={setCurrentAccount} currentAccount={currentAccount} loggedIn={loggedIn} setLoggedIn={setLoggedIn} /> : <Navigate to="/portfolio" />} />
+        <Route path="/invest" element={loggedIn ? <Invest currentAccount={currentAccount} /> : <Navigate to="/login" replace />} />
+        <Route path="/portfolio" element={loggedIn ? <Portfolio currentAccount={currentAccount} /> : <Navigate to="/login" replace/>} />
+        <Route path='/register' element={<RegisterAccount />} />
       </Routes>
     </div>
   );

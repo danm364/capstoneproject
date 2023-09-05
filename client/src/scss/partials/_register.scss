@@ -1,0 +1,60 @@
+@use "./variables" as *;
+
+
+.register {
+
+    &__bg {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 800px;
+        background-image: url(../../public/images/retro-wallstreet.jpg);
+        background-size: cover;
+        background-position: bottom;
+        background-color: $bg-color;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        height: 500px;
+        justify-content: space-around;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background-color: white;
+        max-width: 450px;
+        align-items: center;
+
+        & * {
+            width: 85%;
+        }
+    }
+
+    &__label {
+        color: $light-text;
+        font-size: 0.8rem;
+        align-self: flex-start;
+    }
+
+    &__input {
+        height: 2rem;
+        border-radius: 10px;
+        border: solid 1px $light-text;
+        padding: 22.5px 15px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    &__submit-btn {
+        padding: 10px 0;
+        border-radius: 10px;
+        border: none;
+        background-color: $primary-color;
+        color: $white-text;
+    }
+
+    &__header {
+        color: $primary-color
+    }
+}

@@ -3,9 +3,7 @@ import axios from 'axios';
 import dateFormatter from "dateformat";
 
 
-const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, setSellPrice, setSellTicker, header, setBuyPrice, setBuyTicker}) => {
-
-    let host = "http://localhost:3500"
+const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, setSellPrice, setSellTicker, header, setBuyPrice, setBuyTicker, currentAccount}) => {
     
     function quoteSetter(e) {
         e.preventDefault()
@@ -40,11 +38,9 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
 
             if (header === 'Sell') {
                 let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
-
-                console.log(date)
                 
-                axios.post(`${process.env.REACT_HOST}/transactions/sell`, {
-                    profile: 1,
+                axios.post(`${process.env.REACT_APP_HOST_DATA}/transactions/sell`, {
+                    profile: parseInt(currentAccount.currentAccount),
                     transactionType: header,
                     ticker: response.data['Global Quote']['01. symbol'],
                     price: parseFloat(response.data['Global Quote']['05. price']),
@@ -58,11 +54,9 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
             else if (header === 'Buy') {
                 let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
 
-                console.log(response.data)
-
-                axios.post(`${process.env.REACT_HOST}/transactions/buy`, {
+                axios.post(`${process.env.REACT_APP_HOST_DATA}/transactions/buy`, {
                     
-                    profile: 1,
+                    profile: currentAccount.currentAccount,
                     transactionType: header,
                     ticker: response.data['Global Quote']['01. symbol'],
                     price: parseFloat(response.data['Global Quote']['05. price']),
@@ -81,9 +75,6 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
             
             }
             else if (header === 'Quote') {
-                
-
-                console.log(response.data)
 
                 setQuotePrice(response.data['Global Quote']['05. price'])
                 setQuoteTicker(response.data['Global Quote']['01. symbol'])
