@@ -4,7 +4,7 @@ import FeedComponent from "./FeedComponent";
 
 
 
-const TransactionFeed = ({buyTicker, sellPrice, buyPrice}) => {
+const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
     
 
 
@@ -13,7 +13,9 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice}) => {
 
     useEffect(() => {
 
-        axios.get("http://localhost:3500/transactions/retrieveTrans")
+        axios.post("http://localhost:3500/transactions/retrieveTrans", {
+            currentAccount : currentAccount.currentAccount
+        })
         .then(response => {
 
             setData(JSON.parse(response.data))

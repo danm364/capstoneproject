@@ -47,7 +47,7 @@ router.post("/sell", (req, res) => {
             console.log(err)
         }
         else {
-            console.log(result[0].security_id)
+            
             let secID = result[0].security_id
 
             values = [[data.profile, data.transactionType, secID, data.price, data.quantity, data.date]]
@@ -71,12 +71,13 @@ router.post("/sell", (req, res) => {
  
 })
 
-router.get("/retrieveTrans", (req, res) => {
-  
+router.post("/retrieveTrans", (req, res) => {
 
-    const retrieveRequest = "SELECT T.transaction_id, T.transactionType, S.symbol, T.price, T.quantity, T.transaction_date FROM stockgamedata.transactions T INNER JOIN security S ON T.security_id = S.security_id ORDER BY transaction_date DESC LIMIT ?"
+    profile_id = req.body.currentAccount
 
-    pool.query(retrieveRequest, [15], (err, result) => {
+    const retrieveRequest = "SELECT T.transaction_id, T.transactionType, S.symbol, T.price, T.quantity, T.transaction_date FROM stockgamedata.transactions T INNER JOIN security S ON T.security_id = S.security_id WHERE T.profile_id = ? ORDER BY transaction_date DESC LIMIT ?"
+
+    pool.query(retrieveRequest, [profile_id, 15], (err, result) => {
         if (err) throw err;
 
         result = JSON.stringify(result)

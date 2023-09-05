@@ -16,6 +16,12 @@ CREATE TABLE transactions (
 ALTER TABLE security
 DROP CONSTRAINT Transactions_ibfk_1;
 
+ALTER TABLE transactions
+DROP CONSTRAINT transactions_ibfk_2;
+
 SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE
 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
 WHERE TABLE_NAME='Transactions';
+
+ALTER TABLE transactions
+ADD FOREIGN KEY (profile_id) REFERENCES profiles(profile_id);

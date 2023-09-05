@@ -172,6 +172,7 @@
   width: -moz-fit-content;
   width: fit-content;
   margin: 0;
+  accent-color: #116466;
 }
 .login__forgot {
   text-align: end;
@@ -187,6 +188,25 @@
 .login__register span {
   color: #116466;
   font-weight: 600;
+}
+.login__error-msg {
+  display: none;
+  color: red;
+  position: absolute;
+  top: -30px;
+  left: 0;
+}
+.login__username {
+  position: relative;
+}
+.login__register a {
+  list-style: none;
+  text-decoration: none;
+  color: #116466;
+  font-weight: 700;
+}
+.login__register a:visited, .login__register a:active {
+  color: #116466;
 }
 
 .flex-column {
@@ -326,6 +346,55 @@
     flex-direction: row;
   }
 }
+.register__bg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 800px;
+  background-image: url(../../public/images/retro-wallstreet.jpg);
+  background-size: cover;
+  background-position: bottom;
+  background-color: #F8F8F8;
+}
+.register__form {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  height: 500px;
+  justify-content: space-around;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: white;
+  max-width: 450px;
+  align-items: center;
+}
+.register__form * {
+  width: 85%;
+}
+.register__label {
+  color: #D0D0D0;
+  font-size: 0.8rem;
+  align-self: flex-start;
+}
+.register__input {
+  height: 2rem;
+  border-radius: 10px;
+  border: solid 1px #D0D0D0;
+  padding: 22.5px 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.register__submit-btn {
+  padding: 10px 0;
+  border-radius: 10px;
+  border: none;
+  background-color: #116466;
+  color: white;
+}
+.register__header {
+  color: #116466;
+}
+
 body {
   margin: 0;
   box-sizing: border-box;

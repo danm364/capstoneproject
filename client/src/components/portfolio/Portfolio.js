@@ -7,14 +7,16 @@ import TreeChart from "./PieChart";
 import LineGraph from "./LineGraph"
 
 
-const Portfolio = () => {
+const Portfolio = (currentAccount) => {
 
     const [stocks, setStocks] = useState([])
 
     useEffect(() => {
 
         try {
-        axios.get("http://localhost:3500/holdings/selectHoldings")
+        axios.post("http://localhost:3500/holdings/selectHoldings", {
+            currentAccount
+        })
             .then((response) => {
                 
                 response = JSON.parse(response.data)

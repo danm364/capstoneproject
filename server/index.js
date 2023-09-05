@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const transactionRoutes = require("./routes/transactionRoutes")
 const holdingsRoutes = require("./routes/holdingsRoutes")
+const loginRoutes = require("./routes/loginRoutes")
 const database = require ("./database/sqlDb")
 
 
@@ -25,7 +26,7 @@ app.listen(port, () => {
 
 
 
-  
+app.use("/accounts", loginRoutes);  
 app.use("/transactions", transactionRoutes);
 app.use("/holdings", holdingsRoutes);
 
