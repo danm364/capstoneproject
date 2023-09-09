@@ -13,7 +13,8 @@ ALTER TABLE security
 ADD FOREIGN KEY (security_id) REFERENCES holdings(security_id);
 
 
-
+ALTER TABLE security
+ADD FOREIGN KEY (security_id) REFERENCES transactions(security_id);
 
 ALTER TABLE security
 DROP CONSTRAINT security_ibfk_1;

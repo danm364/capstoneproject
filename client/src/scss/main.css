@@ -394,6 +394,17 @@
 .register__header {
   color: #116466;
 }
+.register__error-msg {
+  color: red;
+  position: absolute;
+  top: -40px;
+  left: 0;
+  display: none;
+}
+
+#register__error-anchor {
+  position: relative;
+}
 
 body {
   margin: 0;

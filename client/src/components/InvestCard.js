@@ -35,6 +35,7 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
           }
           
         axios(options).then((response) => {
+            console.log(response)
 
             if (header === 'Sell') {
                 let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );

@@ -17,7 +17,7 @@ const RegisterAccount = () => {
         let email =  e.target.querySelector("#register__email").value
         let password = e.target.querySelector("#register__password").value
         let confirmPassword = e.target.querySelector("#register__confirm-password").value
-        console.log("hello world")
+        let error = e.target.querySelector(".register__error-msg")
 
         if (email.length > 0 && password.length > 0 && password.length > 0 && confirmPassword.length > 0 && firstName.length > 0 && lastName.length > 0 && password === confirmPassword) {
 
@@ -30,16 +30,23 @@ const RegisterAccount = () => {
                 password : password,
                 date : date
             }).then((response) => {
+                console.log(response)
                     if (response.data.length > 0) {
+                        error.style.display = "none"
                         navigate('/login', {replace: true})
                     }
                     else {
-                        console.log(console.error())
+                        console.log("error")
                     }
                 })
                 
             }
+            else {
+                
+                error.style.display = "block"
+            }
         }
+        
     
     
 
@@ -50,9 +57,10 @@ const RegisterAccount = () => {
                 
                 <form className="register__form" onSubmit={createUser}>
                     <h1 className="register__header">Fill out the below</h1>
-                    <div className="register__first-name flex-column">
-                        <label className="register__label">First Name:</label>
+                    <div className="register__first-name flex-column" id="register__error-anchor">
+                        <label className="register__label" >First Name:</label>
                         <input type="text" placeholder="First Name" className="register__input" id="register__first-name" />
+                        <p className="register__error-msg">Please make sure all the below is filled out</p>
                     </div>
                     <div className="register__last-name flex-column">
                         <label className="register__label">Last Name:</label>
