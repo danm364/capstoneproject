@@ -72,7 +72,9 @@ const getProfiles = "SELECT profile_id FROM profiles ORDER BY profile_id ASC"
                             }
                         }
 
-                        await makeApiRequestWithDelay(options, 20000).then((result) => {
+                        await makeApiRequestWithDelay(options, 100000).then((result) => {
+
+                            console.log("one")
 
                             data = {
                                 ticker : result['Global Quote']['01. symbol'],

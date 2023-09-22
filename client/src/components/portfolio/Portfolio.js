@@ -2,9 +2,9 @@ import React, {useState, PureComponent}  from "react";
 import Holdings from "./holdings/Holdings";
 import axios from "axios";
 import { useEffect } from "react";
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 import TreeChart from "./PieChart";
-import LineGraph from "./LineGraph"
+import LineGraph from "./LineGraph";
+import BarChart from "./BarChart";
 
 
 const Portfolio = (currentAccount) => {
@@ -43,8 +43,10 @@ const Portfolio = (currentAccount) => {
         <div className="portfolio__section">
             <div className="portfolio__container">
                 <div className="portfolio__graphs">
+                    <BarChart stocks={stocks}/>               
+                </div>
+                <div className="portfolio__graphs">
                     <LineGraph stocks={stocks} />
-
                 </div>
                 <div className="portfolio__graphs">
                     <TreeChart stocks={stocks}/>               
@@ -53,7 +55,7 @@ const Portfolio = (currentAccount) => {
             <div className="portfolio__holdings">
                 <div className="portfolio__headers">
                     <div>Ticker</div>
-                    <div>Cost</div>
+                    <div>Cost Per Share</div>
                     <div>Market Value</div>
                 </div>
                 < Holdings stocks={stocks}/>

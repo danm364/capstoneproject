@@ -11,7 +11,7 @@ router.post("/selectHoldings", (req, res) => {
     // FROM stockgamedata.transactions T INNER JOIN security S ON T.security_id = S.security_id WHERE transactionType = 'BUY' GROUP BY ticker "
     // const hello = "(SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY) AS yesterday)"
 
-    const retrieveRequest = "SELECT S.Symbol ticker, ROUND(AVG(T.price),2) cost, MAX(H.securityMarketValue) marketValue FROM holdings H INNER JOIN security S ON S.security_id = H.security_id INNER JOIN transactions T ON T.security_id = H.security_id WHERE DATE(H.holdings_date) = CURDATE() AND H.profile_id = ? GROUP BY ticker "
+    const retrieveRequest = "SELECT S.Symbol ticker, ROUND(AVG(T.price),2) cost, MAX(H.securityMarketValue) marketValue, MAX(H.dailyStockReturn) stockReturn, MAX(H.portfolioWeight) portfolioWeight FROM holdings H INNER JOIN security S ON S.security_id = H.security_id INNER JOIN transactions T ON T.security_id = H.security_id WHERE DATE(H.holdings_date) = CURDATE() AND H.profile_id = ? GROUP BY ticker "
 
     pool.query(retrieveRequest, [[req.body.currentAccount.currentAccount]], (err, result) => {
         if (err) throw err;

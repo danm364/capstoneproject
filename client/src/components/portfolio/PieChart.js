@@ -39,8 +39,8 @@ const TreeChart = ({stocks}) => {
 
         stocks.length > 0 && COLORS.length > 0 ?
             <ResponsiveContainer width="99%" height="99%">
-                <PieChart width={730} height={250}>
-                    <Pie data={stocks}  dataKey="marketValue" nameKey="ticker" cx="50%" cy="50%" outerRadius={160} label={stocks} fill="#8884d8"/>
+                <PieChart width={700} height={220}>
+                    <Pie data={stocks}  dataKey="marketValue" nameKey="ticker" cx="50%" cy="50%" outerRadius={140} label={stocks} fill="#8884d8"/>
                     {stocks.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={"#0088FE"} />
                     ))}
