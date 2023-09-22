@@ -7,6 +7,8 @@ const TreeChart = ({stocks}) => {
 
     const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
+    console.log(stocks)
+
     return (
 
         stocks.length > 0 && COLORS.length > 0 ?
