@@ -1,8 +1,6 @@
 
 
 
-
-
 const FeedComponent = ({transType, ticker, price, quantity, date, setRefreshKey}) => {
 
     return (
