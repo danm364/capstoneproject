@@ -7,7 +7,9 @@ import filterImage from '../assets/images/filter.svg'
 
 const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
     
-    let dropdown = useRef(null)
+    let dropdownTransType = useRef(null)
+    let dropdownSymbol = useRef(null)
+    let dropdownPrice = useRef(null)
 
     const [data, setData] = useState([]);
     const [columnData, setColumnData] = useState([]);
@@ -19,6 +21,11 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
             currentAccount : currentAccount.currentAccount
         })
         .then(response => {
+            let allCheckBoxes = document.querySelectorAll(".feed__dropdown-component")
+
+            for (let i = 0; i < allCheckBoxes.length; i++) {
+                allCheckBoxes[i].checked = false
+            }
 
             setData(JSON.parse(response.data))
             setColumnData(JSON.parse(response.data))
@@ -30,41 +37,152 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
 
       function toggleFilter(e) {
 
-        if(e.type === 'mouseover') {
-            dropdown.current.style.display = 'flex';
+        let targetID = e.target.id
+        let eventType = e.type
+
+        //exiting and entering filter
+        if(eventType === 'mouseover' && targetID === "transtype-filter") {
+            dropdownTransType.current.style.display = 'flex';
         }
-        else if (e.type === 'mouseleave') {
-            dropdown.current.style.display = 'none';
+        else if (eventType === 'mouseleave') {
+            dropdownTransType.current.style.display = 'none';
         }
 
+        if(eventType === 'mouseover' && targetID === "ticker-filter") {
+            dropdownSymbol.current.style.display = 'flex';
+        }
+        else if (eventType === 'mouseleave') {
+            dropdownSymbol.current.style.display = 'none';
+        }
+
+        if(eventType === 'mouseover' && targetID === "price-filter") {
+            
+            dropdownPrice.current.style.display = 'flex';
+        }
       }
 
       function applyFilters(e) {
         e.preventDefault()
-        dropdown.current.style.display = 'none';
+        let anyFiltersAddedFlag = false;
+        dropdownTransType.current.style.display = 'none';
+        dropdownSymbol.current.style.display = 'none';
+        dropdownPrice.current.style.display = 'none';
         let selectAllDropdownOptions = document.querySelectorAll(".feed__dropdown-input") 
-        // console.log(e)
-        // console.log(e.target)
-        // console.log(e.target.elements[0].checked.input)
-        console.log(selectAllDropdownOptions[0].checked)
+
+        //different filter flags
+        let transtypeColumnIsCheckedFlag = false;
+        let tickerColumnIsCheckedFlag = false;
+        let priceColumnIsCheckedFlag = false;
+
+
+        //select different checkboxes so we can check which columns need to be filtered
+        let selectTranstypeColumn = document.querySelectorAll("#transtype-input")
+        let selectTickerColumn = document.querySelectorAll("#ticker-input")
+        let selectPriceColumn = document.querySelectorAll("#price-input")
+
+        let transTypeColChecks = 0
+        let tickerColChecks = 0
+        let priceColChecks = 0
 
         let checkedFilters = []
+        let uncheckedFilters = []
+
+        let row1 = {
+            column1 : false,
+            column2 : false,
+            column3 : false
+        }
+
+        let rows = []
+        let newData = [...data]
+
+        //creates the grid
+        for (let i = 0; i < newData.length; i++) {
+            rows.push({})
+        }
+
+        //checks to see what flags have been checked off, if they have adds it to the checked flags/filters, which will be used to in the final filter 
 
         for (let i = 0; i < selectAllDropdownOptions.length; i++) {
             if (selectAllDropdownOptions[i].checked) {
                 checkedFilters.push(selectAllDropdownOptions[i].parentNode.textContent)
+                anyFiltersAddedFlag = true;
+                
+            } 
+            else {
+                uncheckedFilters.push(selectAllDropdownOptions[i].parentNode.textContent)
+            }
+        }
+        for (let i = 0; i < selectTranstypeColumn.length; i++) {
+            if (selectTranstypeColumn[i].checked) {
+                transtypeColumnIsCheckedFlag = true;
+                transTypeColChecks++;
             } 
         }
-        let newData = [...columnData]
 
-        setColumnData(newData.filter(element => checkedFilters.includes(element.transactionType)))
+        for (let i = 0; i < selectTickerColumn.length; i++) {
+            if (selectTickerColumn[i].checked) {
+                tickerColumnIsCheckedFlag = true;
+                tickerColChecks++;
+            } 
+        }
 
-        
+        for (let i = 0; i < selectPriceColumn.length; i++) {
+            if (selectPriceColumn[i].checked) {
+                priceColumnIsCheckedFlag = true;
+                priceColChecks++;
+            } 
+        }
 
-        console.log(data)
-        // console.log(filteredData)
+        for (let i = 0; i < newData.length; i++) {
+            if (checkedFilters.includes(newData[i].transactionType)) {
+                rows[i]["transTypeCol"] = true
+            }
+            else if (transTypeColChecks === 0){
+                rows[i]["transTypeCol"] = null
+            }
+            else {
+                rows[i]["transTypeCol"] = false
+            }
+            if (checkedFilters.includes(newData[i].symbol)) {
+                rows[i]["symbolCol"] = true
+            }
+            else if (tickerColChecks === 0) {
+                rows[i]["symbolCol"] = null
+            }
+            else {
+                rows[i]["symbolCol"] = false
+            }
+            if (checkedFilters.includes(newData[i].price)) {
+                rows[i]["priceCol"] = true
+            }
+            else if (priceColChecks === 0) {
+                rows[i]["priceCol"] = null
+            }
+            else {
+                rows[i]["priceCol"] = false
+            }
+        }
+
+        console.log(rows)
+
+        console.log(Object.values(newData[1]))
 
 
+        // apply our filters
+        if (anyFiltersAddedFlag) {
+                setColumnData(newData.filter((element, index) => {
+                    if (Object.values(rows[index]).every(value => value != false)) {
+                        return element
+                    }
+                }
+                ))
+        }
+        else {
+            setColumnData(newData)
+        }
+
+        dropdownPrice.current.style.display = 'none';
       }
 
     return (
@@ -74,9 +192,9 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                     <div className="feed__svg-container">
                         <div className="feed__column-header">Transaction Type</div>
                         <div className="feed__scale-down"  onMouseOver={toggleFilter} >
-                            <img className="feed__filter-arrow" src={filterImage} alt="^" />
+                            <img className="feed__filter-arrow" src={filterImage} alt="^" id="transtype-filter"/>
                         </div>
-                        <form className="feed__dropdown" ref={dropdown} onMouseLeave={toggleFilter} onSubmit={applyFilters}>
+                        <form className="feed__dropdown" ref={dropdownTransType} onMouseLeave={toggleFilter} onSubmit={applyFilters}>
                             {data.reduce((acc,curr) => {
                                 if(!acc.includes(curr["transactionType"])) {
                                     acc.push(curr["transactionType"])
@@ -84,9 +202,9 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                                 return acc;
 
                             }, []).map((element, index) => (
-                                <label htmlFor={`label-${element}`} className="feed__dropdown-component" >
+                                <label htmlFor={`transtype-input`} className="feed__dropdown-component" >
                                         {element}
-                                        <input id={`label-${element}`} className="feed__dropdown-input" type="checkbox" />
+                                        <input id={`transtype-input`} className="feed__dropdown-input" type="checkbox" />
                                 </label>
 
                             ))
@@ -104,29 +222,29 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                 <div className="feed__header-border">
                     <div className="feed__svg-container">
                         <div >Ticker</div>
-                        <div className="feed__scale-down"  onClick={toggleFilter}>
-                            <img className="feed__filter-arrow" src={filterImage} alt="^" />
+                        <div className="feed__scale-down"  onMouseOver={toggleFilter}>
+                            <img className="feed__filter-arrow" src={filterImage} alt="^" id="ticker-filter"/>
                         </div>
-                        <div className="feed__dropdown">
-                        {data.reduce((acc,curr) => {
+                        <form className="feed__dropdown" ref={dropdownSymbol} onMouseLeave={toggleFilter} onSubmit={applyFilters}>
+                            {data.reduce((acc,curr) => {
                                 if(!acc.includes(curr["symbol"])) {
                                     acc.push(curr["symbol"])
                                 }
                                 return acc;
 
                             }, []).map((element, index) => (
-                                <div className="feed__dropdown-component">
+                                <label htmlFor={`ticker-input`} className="feed__dropdown-component" >
                                         {element}
-                                        <div></div>
-                                
-                                </div>
+                                        <input id={`ticker-input`} className="feed__dropdown-input" type="checkbox" />
+                                </label>
 
                             ))
                         
                             }
-                        </div>
+                            <button className="feed__dropdown-sub-btn" >Ok</button>
+                        </form>
                     </div>
-                    {data.map((element, index) => (
+                    {columnData.map((element, index) => (
            
                         <div> {element.symbol}</div>
                     
@@ -136,29 +254,29 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                 <div className="feed__header-border">
                     <div className="feed__svg-container">
                         <div >Price</div>
-                        <div className="feed__scale-down"  onClick={toggleFilter}>
-                            <img className="feed__filter-arrow" src={filterImage} alt="^" />
+                        <div className="feed__scale-down"  onMouseOver={toggleFilter} >
+                            <img className="feed__filter-arrow" src={filterImage} alt="^" id="price-filter"/>
                         </div>
-                        <div className="feed__dropdown">
-                        {data.reduce((acc,curr) => {
+                        <form className="feed__dropdown" ref={dropdownPrice} onMouseLeave={toggleFilter} onSubmit={applyFilters}>
+                            {data.reduce((acc,curr) => {
                                 if(!acc.includes(curr["price"])) {
                                     acc.push(curr["price"])
                                 }
                                 return acc;
 
                             }, []).map((element, index) => (
-                                <div className="feed__dropdown-component">
+                                <label htmlFor={`price-input`} className="feed__dropdown-component" >
                                         {element}
-                                        <div></div>
-                                
-                                </div>
+                                        <input id={`price-input`} className="feed__dropdown-input" type="checkbox" />
+                                </label>
 
                             ))
                         
                             }
-                        </div>
+                            <button className="feed__dropdown-sub-btn" >Ok</button>
+                        </form>
                     </div>
-                    {data.map((element, index) => (
+                    {columnData.map((element, index) => (
            
                         <div> {element.price}</div>
                     
