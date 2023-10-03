@@ -10,6 +10,8 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
     let dropdownTransType = useRef(null)
     let dropdownSymbol = useRef(null)
     let dropdownPrice = useRef(null)
+    let dropdownQuantity = useRef(null)
+    let dropdownDate = useRef(null)
 
     const [data, setData] = useState([]);
     const [columnData, setColumnData] = useState([]);
@@ -59,42 +61,58 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
             
             dropdownPrice.current.style.display = 'flex';
         }
+        if(eventType === 'mouseover' && targetID === "quantity-filter") {
+            
+            dropdownQuantity.current.style.display = 'flex';
+        }
+        if(eventType === 'mouseover' && targetID === "date-filter") {
+            
+            dropdownDate.current.style.display = 'flex';
+        }
+
       }
 
       function applyFilters(e) {
         e.preventDefault()
-        let anyFiltersAddedFlag = false;
+        
         dropdownTransType.current.style.display = 'none';
         dropdownSymbol.current.style.display = 'none';
         dropdownPrice.current.style.display = 'none';
+        dropdownQuantity.current.style.display = 'none';
+        dropdownDate.current.style.display = 'none';
+
+        
         let selectAllDropdownOptions = document.querySelectorAll(".feed__dropdown-input") 
 
         //different filter flags
+        let anyFiltersAddedFlag = false;
         let transtypeColumnIsCheckedFlag = false;
         let tickerColumnIsCheckedFlag = false;
         let priceColumnIsCheckedFlag = false;
+        let quantityColumnsIsCheckedFlag = false;
+        let dateColumnsIsCheckedFlag = false;
 
 
         //select different checkboxes so we can check which columns need to be filtered
         let selectTranstypeColumn = document.querySelectorAll("#transtype-input")
         let selectTickerColumn = document.querySelectorAll("#ticker-input")
         let selectPriceColumn = document.querySelectorAll("#price-input")
+        let selectQuantityColumn = document.querySelectorAll("#quantity-input")
+        let selectDateColumn = document.querySelectorAll("#date-input")
 
         let transTypeColChecks = 0
         let tickerColChecks = 0
         let priceColChecks = 0
+        let quantityColChecks = 0
+        let dateColChecks = 0
 
         let checkedFilters = []
         let uncheckedFilters = []
 
-        let row1 = {
-            column1 : false,
-            column2 : false,
-            column3 : false
-        }
-
         let rows = []
         let newData = [...data]
+
+        console.log(selectAllDropdownOptions)
 
         //creates the grid
         for (let i = 0; i < newData.length; i++) {
@@ -106,6 +124,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
         for (let i = 0; i < selectAllDropdownOptions.length; i++) {
             if (selectAllDropdownOptions[i].checked) {
                 checkedFilters.push(selectAllDropdownOptions[i].parentNode.textContent)
+                
                 anyFiltersAddedFlag = true;
                 
             } 
@@ -133,6 +152,22 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                 priceColChecks++;
             } 
         }
+
+        for (let i = 0; i < selectQuantityColumn.length; i++) {
+            if (selectQuantityColumn[i].checked) {
+                quantityColChecks = true;
+                quantityColChecks++;
+            } 
+        }
+
+        for (let i = 0; i < selectDateColumn.length; i++) {
+            if (selectDateColumn[i].checked) {
+                dateColChecks = true;
+                dateColChecks++;
+            } 
+        }
+
+        console.log(rows)
 
         for (let i = 0; i < newData.length; i++) {
             if (checkedFilters.includes(newData[i].transactionType)) {
@@ -162,11 +197,31 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
             else {
                 rows[i]["priceCol"] = false
             }
+            console.log(newData)
+            console.log(newData[i].quantity)
+            if (checkedFilters.includes(String(newData[i].quantity))) {
+                rows[i]["quantityCol"] = true
+            }
+            else if (quantityColChecks === 0) {
+                rows[i]["quantityCol"] = null
+            }
+            else {
+                rows[i]["quantityCol"] = false
+            }
+            if (checkedFilters.includes(newData[i].transaction_date)) {
+                rows[i]["dateCols"] = true
+            }
+            else if (dateColChecks === 0) {
+                rows[i]["dateCols"] = null
+            }
+            else {
+                rows[i]["dateCols"] = false
+            }
         }
 
         console.log(rows)
 
-        console.log(Object.values(newData[1]))
+        // console.log(Object.values(newData[1]))
 
 
         // apply our filters
@@ -183,6 +238,8 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
         }
 
         dropdownPrice.current.style.display = 'none';
+        dropdownQuantity.current.style.display = 'none';
+        dropdownDate.current.style.display = 'none';
       }
 
     return (
@@ -285,29 +342,29 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                 <div className="feed__header-border">    
                     <div className="feed__svg-container">
                         <div >Quantity</div>
-                        <div className="feed__scale-down"  onClick={toggleFilter}>
-                            <img className="feed__filter-arrow" src={filterImage} alt="^" />
+                        <div className="feed__scale-down"  onMouseOver={toggleFilter}>
+                            <img className="feed__filter-arrow" src={filterImage} alt="^" id="quantity-filter"/>
                         </div>
-                        <div className="feed__dropdown">
-                        {data.reduce((acc,curr) => {
+                        <form className="feed__dropdown" ref={dropdownQuantity} onMouseLeave={toggleFilter} onSubmit={applyFilters}>
+                            {data.reduce((acc,curr) => {
                                 if(!acc.includes(curr["quantity"])) {
                                     acc.push(curr["quantity"])
                                 }
                                 return acc;
 
                             }, []).map((element, index) => (
-                                <div className="feed__dropdown-component">
+                                <label htmlFor={`quantity-input`} className="feed__dropdown-component" >
                                         {element}
-                                        <div></div>
-                                
-                                </div>
+                                        <input id={`quantity-input`} className="feed__dropdown-input" type="checkbox" />
+                                </label>
 
                             ))
                         
                             }
-                        </div>
+                            <button className="feed__dropdown-sub-btn" >Ok</button>
+                        </form>
                     </div>
-                    {data.map((element, index) => (
+                    {columnData.map((element, index) => (
            
                         <div> {element.quantity}</div>
                     
@@ -316,29 +373,29 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                 <div className="feed__header-border">      
                     <div className="feed__svg-container">
                         <div >Date</div>
-                        <div className="feed__scale-down" onClick={toggleFilter}>
-                            <img className="feed__filter-arrow" src={filterImage} alt="^" />
+                        <div className="feed__scale-down" onMouseOver={toggleFilter}>
+                            <img className="feed__filter-arrow" src={filterImage} alt="^" id="date-filter"/>
                         </div>
-                        <div className="feed__dropdown">
-                        {data.reduce((acc,curr) => {
+                        <form className="feed__dropdown" ref={dropdownDate} onMouseLeave={toggleFilter} onSubmit={applyFilters}>
+                            {data.reduce((acc,curr) => {
                                 if(!acc.includes(curr["transaction_date"])) {
                                     acc.push(curr["transaction_date"])
                                 }
                                 return acc;
 
                             }, []).map((element, index) => (
-                                <div className="feed__dropdown-component">
-                                        {new Date(element).toLocaleDateString()}
-                                        <div></div>
-                                
-                                </div>
+                                <label htmlFor={`date-input`} className="feed__dropdown-component" >
+                                        {element}
+                                        <input id={`date-input`} className="feed__dropdown-input" type="checkbox" />
+                                </label>
 
                             ))
                         
                             }
-                        </div>
+                            <button className="feed__dropdown-sub-btn" >Ok</button>
+                        </form>
                     </div>
-                    {data.map((element, index) => (
+                    {columnData.map((element, index) => (
            
                         <div> {new Date(element.transaction_date).toLocaleString()}</div>
                     
