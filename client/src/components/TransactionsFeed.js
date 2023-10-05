@@ -208,7 +208,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
             else {
                 rows[i]["quantityCol"] = false
             }
-            if (checkedFilters.includes(newData[i].transaction_date)) {
+            if (checkedFilters.includes(new Date(newData[i].transaction_date).toDateString())) {
                 rows[i]["dateCols"] = true
             }
             else if (dateColChecks === 0) {
@@ -378,8 +378,8 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                         </div>
                         <form className="feed__dropdown" ref={dropdownDate} onMouseLeave={toggleFilter} onSubmit={applyFilters}>
                             {data.reduce((acc,curr) => {
-                                if(!acc.includes(curr["transaction_date"])) {
-                                    acc.push(curr["transaction_date"])
+                                if(!acc.includes(new Date(curr["transaction_date"]).toDateString())) {
+                                    acc.push(new Date(curr["transaction_date"]).toDateString())
                                 }
                                 return acc;
 
