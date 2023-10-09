@@ -197,8 +197,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
             else {
                 rows[i]["priceCol"] = false
             }
-            console.log(newData)
-            console.log(newData[i].quantity)
+
             if (checkedFilters.includes(String(newData[i].quantity))) {
                 rows[i]["quantityCol"] = true
             }
@@ -218,11 +217,6 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                 rows[i]["dateCols"] = false
             }
         }
-
-        console.log(rows)
-
-        // console.log(Object.values(newData[1]))
-
 
         // apply our filters
         if (anyFiltersAddedFlag) {
