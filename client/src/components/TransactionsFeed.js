@@ -167,7 +167,6 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
             } 
         }
 
-        console.log(rows)
 
         for (let i = 0; i < newData.length; i++) {
             if (checkedFilters.includes(newData[i].transactionType)) {

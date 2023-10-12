@@ -11,22 +11,32 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
         let email = e.target.querySelector("#login__email").value
         let password = e.target.querySelector("#login__password").value
         let error = e.target.querySelector(".login__error-msg")
+        
     
         if (email.length > 0 && password.length > 0) {
             axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/loginValidation`, {
                 email : email,
                 password : password
             }).then((response) => {
-
-        
-                if (response.data.length > 0) {
+                if (response.data) {
 
                     error.style.display = "none"
                     setLoggedIn(!loggedIn)
                     setCurrentAccount(response.data[0]["profile_id"])
                 }
+                
                 else {
+                    error.style.display = "block";
+                    error.innerText = "Incorrect Email/Password"
+                    
+                }
+            })
+            .catch((errorMsg) => {
+                console.log(errorMsg)
+                if (errorMsg.response.status === 429) {
                     error.style.display = "block"
+                    error.innerText = "Too many failed login attempts have been made"
+                    
                 }
             })
         }

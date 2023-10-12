@@ -7,6 +7,7 @@ const transactionRoutes = require("./routes/transactionRoutes")
 const holdingsRoutes = require("./routes/holdingsRoutes")
 const loginRoutes = require("./routes/loginRoutes")
 const database = require ("./database/sqlDb")
+const { rateLimit } = require('express-rate-limit')
 
 
 //Express setup
@@ -22,7 +23,7 @@ app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
 
-
+  
 
 
 

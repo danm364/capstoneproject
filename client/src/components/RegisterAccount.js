@@ -30,8 +30,7 @@ const RegisterAccount = () => {
                 password : password,
                 date : date
             }).then((response) => {
-                console.log(response)
-                    if (response.data.length > 0) {
+                    if (response.data.message === "Registration successful") {
                         error.style.display = "none"
                         navigate('/login', {replace: true})
                     }
