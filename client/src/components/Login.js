@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {Navigate, Link} from 'react-router-dom';
-
+import Cookies from 'js-cookie';
 
 const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
 
@@ -18,12 +18,11 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
                 password : password
             }).then((response) => {
 
-        
-                if (response.data.length > 0) {
+                if (response.data.isSuccessful) {
 
                     error.style.display = "none"
                     setLoggedIn(!loggedIn)
-                    setCurrentAccount(response.data[0]["profile_id"])
+                    setCurrentAccount(response.data.profile)
                 }
                 else {
                     error.style.display = "block"

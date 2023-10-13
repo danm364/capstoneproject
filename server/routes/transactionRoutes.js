@@ -8,22 +8,24 @@ router.post('/buy', async (req, res) => {
   
       // Get security ID based on the ticker symbol
       const secID = await getSecurityId(data.ticker);
-
-      console.log(secID)
   
       // Get profile cash and total quantity of buys
-      const cashAmount = await getProfileCash(data.profile, secID);
-      const quantityOfBuys = await getQuantityOfBuys(data.profile, secID);
+      let cashAmount = await getProfileCash(data.profile);
+      cashAmount = parseInt(cashAmount[0].CashOnHand) ? parseInt(cashAmount[0].CashOnHand) : 0
+
+      let totalQuantity = await getTotalQuantity(data.profile, secID)
+      totalQuantity = parseInt(totalQuantity[0].totalQuantity) ? parseInt(totalQuantity[0].totalQuantity) : 0
+
+      let quantityOfBuys = await getQuantityOfBuys(data.profile, secID);
+      quantityOfBuys = parseInt(quantityOfBuys[0].quantityOfBuys) ? parseInt(quantityOfBuys[0].quantityOfBuys) : 0
   
       // Calculate CashOnHand and buysMinusSellsQuantity
-      const CashOnHand = parseFloat(cashAmount[0].CashOnHand);
-      const buysMinusSellsQuantity = parseInt(quantityOfBuys[0].quantityOfBuys) - parseInt(cashAmount[0].totalQuantity - parseInt(quantityOfBuys[0].quantityOfBuys));
 
-      console.log(CashOnHand)
-      console.log(buysMinusSellsQuantity)
+      const CashOnHand = cashAmount ? cashAmount : 0 ;
+      const buysMinusSellsQuantity = (quantityOfBuys) - ((totalQuantity) - (quantityOfBuys));
 
       // Check if there's enough cash and available quantity to make the buy
-      if ((CashOnHand > (data.quantity * data.price)) && buysMinusSellsQuantity > 0) {
+      if ((CashOnHand > (data.quantity * data.price)) && buysMinusSellsQuantity > -1) {
         const newCashOnHand = CashOnHand - data.price * data.quantity;
   
         // Update CashOnHand after the buy is posted
@@ -56,22 +58,22 @@ router.post('/buy', async (req, res) => {
       const secID = await getSecurityId(data.ticker);
   
       // Get profile cash, total quantity and total quantity of sells
-      const cashAmount = await getProfileCash(data.profile, secID);
-      const quantityOfSells = await getQuantityOfSells(data.profile, secID);
-      const totalQuantity = cashAmount[0].totalQuantity
+      let cashAmount = await getProfileCash(data.profile);
+      cashAmount = parseInt(cashAmount[0].CashOnHand) ? parseInt(cashAmount[0].CashOnHand) : 0
+
+      let quantityOfSells = await getQuantityOfSells(data.profile, secID);
+      quantityOfSells = parseInt(quantityOfSells[0].quantityOfSells) ? parseInt(quantityOfSells[0].quantityOfSells) : 0
+      
+      
+      let totalQuantity = await getTotalQuantity(data.profile, secID)
+      totalQuantity = parseInt(totalQuantity[0].totalQuantity) ? parseInt(totalQuantity[0].totalQuantity) : 0
   
       // Calculate CashOnHand and sellsMinusBuysQuantity
-      let CashOnHand = parseFloat(cashAmount[0].CashOnHand);
-      const sellsMinusBuysQuantity = parseInt(totalQuantity - parseInt(quantityOfSells[0].quantityOfSells)) - parseInt(quantityOfSells[0].quantityOfSells);
-        
-        console.log(cashAmount[0].totalQuantity)
-        console.log(quantityOfSells)
-        console.log(quantityOfSells[0].quantityOfSells)
-        console.log(sellsMinusBuysQuantity)
-        console.log(data.quantity)
+      let CashOnHand = cashAmount;
+      const sellsMinusBuysQuantity = (totalQuantity - (quantityOfSells)) - (quantityOfSells);
   
       // Check if there's enough quantity to sell
-      if (sellsMinusBuysQuantity > data.quantity && sellsMinusBuysQuantity > 0) {
+      if (sellsMinusBuysQuantity > data.quantity && sellsMinusBuysQuantity > -1) {
         // Update CashOnHand after the sell is posted
         CashOnHand += data.price * data.quantity;
         await updateProfileCash(data.profile, CashOnHand);
@@ -111,12 +113,12 @@ router.post('/buy', async (req, res) => {
   
   
   // Function to get the profile cash and total quantity of sells
-  async function getProfileCash(profile, secID) {
+  async function getProfileCash(profile) {
     return new Promise((resolve, reject) => {
-      const selectProfileCash = `SELECT MAX(P.CashOnHand) CashOnHand, SUM(T.quantity) totalQuantity
-        FROM profiles P INNER JOIN transactions T ON T.profile_id = P.profile_id
-        WHERE T.profile_id = ? AND T.security_id = ?`;
-      pool.query(selectProfileCash, [profile, secID], (err, result) => {
+      const selectProfileCash = `SELECT CashOnHand CashOnHand FROM profiles WHERE profile_id = ?`;
+
+
+      pool.query(selectProfileCash, [profile], (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -124,6 +126,24 @@ router.post('/buy', async (req, res) => {
         }
       });
     });
+  }
+
+  async function getTotalQuantity(profile, secID) {
+    return new Promise((resolve, reject) => {
+
+      let selectTotalQuantity = `SELECT SUM(T.quantity) totalQuantity
+      FROM transactions T WHERE T.profile_id = ? AND T.security_id = ?`;
+
+      pool.query(selectTotalQuantity, [profile, secID], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+
+    })
+
   }
   
   // Function to get the total quantity of sell transactions

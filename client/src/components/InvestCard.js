@@ -53,6 +53,7 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
             }
             else if (header === 'Buy') {
                 let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
+                console.log(currentAccount)
 
                 axios.post(`${process.env.REACT_APP_HOST_DATA}/transactions/buy`, {
                     
@@ -65,6 +66,7 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
                     
                     
                 }).then((response) => {
+                    console.log(response)
 
                     setBuyPrice(response.data.price)
                     setBuyTicker(response.data.ticker)
