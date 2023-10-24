@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 const port = 3500
 app.use(cors());
 require('dotenv').config();
-
+const jwt = require('jsonwebtoken');
 
 
 app.listen(port, () => {

@@ -5,6 +5,8 @@ import Cookies from 'js-cookie';
 
 const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
 
+    
+
     function checkValidUser(e) {
         e.preventDefault()
     
@@ -17,10 +19,12 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
                 email : email,
                 password : password
             }).then((response) => {
-
+                console.log(response)
                 if (response.data.isSuccessful) {
 
                     error.style.display = "none"
+                    document.cookie = `token=${response.data.token}`
+               
                     setLoggedIn(!loggedIn)
                     setCurrentAccount(response.data.profile)
                 }
@@ -32,6 +36,8 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
     }
 
     let resetError = useRef(null)
+
+    
 
     useEffect(() => {
         

@@ -4,7 +4,15 @@ const pool = require("../database/sqlDb");
 const axios = require("axios")
 const bcrypt = require("bcrypt")
 const rateLimit = require("express-rate-limit");
+const jwt = require('jsonwebtoken');
+const jwtAuth = require("../utility/jwtAuth")
+require('dotenv').config();
 
+
+async function generateAccessToken(username) {
+    return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+  }
+console.log(process.env.TOKEN_SECRET)
 // Create a rate limiter middleware
 const loginLimiter = rateLimit({
     windowMs: 10 * 60 * 100, // 15 minutes
@@ -12,39 +20,49 @@ const loginLimiter = rateLimit({
     message: "Too many login attempts, please try again in 15 minutes.",
 });
 
-router.post("/loginValidation", loginLimiter, (req, res) => {
+router.get("/authenticateUser", jwtAuth.authenticateJWT, async (req, res) => {
+    isAuthenticated = true
 
-    let isLoginSuccessful = false;
-    let email = req.body.email
-    let password = req.body.password
+    res.json(isAuthenticated)
+})
+
+router.post("/loginValidation", loginLimiter, async (req, res) => {
+
+    let isLoginSuccessful = {
+        isSuccessful : false
+    };
+    let email = req.body.email;
+    let password = req.body.password;
 
     const retrieveRequest = 'SELECT profile_id ,email, password FROM profiles WHERE email = ?'
 
-    pool.query(retrieveRequest, [email], async (err, result) => {
-        console.log(result)
-        if (err) throw err;
+    
 
         try{
-            if(result.length > 0 && await bcrypt.compare(password, result[0].password)) {
-                console.log(result)
+
+            const [results] = await pool.promise().query(retrieveRequest, [email]);
+      
+            if (results.length > 0 && await bcrypt.compare(password, results[0].password)) {
+
+                let profile_id = results[0].profile_id
+                let username = results[0].email
+                
+                let token = await generateAccessToken({username: username})
+               
                 isLoginSuccessful = {
                     isSuccessful : true,
-                    profile : result[0].profile_id
+                    profile : profile_id,
+                    username : username,
+                    token : token
 
                 }
-                res.send(isLoginSuccessful);
-            }
-            else {
-                res.send(isLoginSuccessful);
+                res.send(isLoginSuccessful)
             }
         }
-        catch {
-        
+        catch  (error) {
+            console.log("hello")
             res.send(isLoginSuccessful);
         }
-        
-    })
-    
 })
 
 router.post("/register", async (req, res) => {

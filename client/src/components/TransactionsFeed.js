@@ -112,8 +112,6 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
         let rows = []
         let newData = [...data]
 
-        console.log(selectAllDropdownOptions)
-
         //creates the grid
         for (let i = 0; i < newData.length; i++) {
             rows.push({})
@@ -218,11 +216,6 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                 rows[i]["dateCols"] = false
             }
         }
-
-        console.log(rows)
-
-        // console.log(Object.values(newData[1]))
-
 
         // apply our filters
         if (anyFiltersAddedFlag) {

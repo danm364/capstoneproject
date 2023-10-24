@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './scss/main.css';
 import Login from './components/Login';
 import Pricing from './components/Pricing';
@@ -6,11 +6,36 @@ import Portfolio from './components/portfolio/Portfolio';
 import Invest from './components/Invest';
 import RegisterAccount from './components/RegisterAccount'
 import {Routes, Route, Link, Navigate} from 'react-router-dom';
+import axios from "axios";
 
 function App() {
 
   const [loggedIn, setLoggedIn] = useState(false)
   const [currentAccount, setCurrentAccount] = useState(0)
+
+  function getCookieValue(name) {
+    console.log(name)
+    const value = document.cookie;
+    const parts = value.split("=");
+    console.log(parts)
+
+    if (parts.length === 2) return parts[1]
+}
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_HOST_DATA}/accounts/authenticateUser`, {
+
+        headers : {
+            Authorization : `Bearer ${getCookieValue(document.cookie)}` 
+        }
+        
+    }).then((response) => {
+
+        setLoggedIn(true)
+        console.log(getCookieValue(document.cookie))
+        console.log(response)
+    })
+  })  
 
   return (
     <div className="App">
