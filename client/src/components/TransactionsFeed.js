@@ -61,13 +61,22 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
             
             dropdownPrice.current.style.display = 'flex';
         }
+        else if (eventType === 'mouseleave') {
+            dropdownPrice.current.style.display = 'none';
+        }
         if(eventType === 'mouseover' && targetID === "quantity-filter") {
             
             dropdownQuantity.current.style.display = 'flex';
         }
+        else if (eventType === 'mouseleave') {
+            dropdownQuantity.current.style.display = 'none';
+        }
         if(eventType === 'mouseover' && targetID === "date-filter") {
             
             dropdownDate.current.style.display = 'flex';
+        }
+        else if (eventType === 'mouseleave') {
+            dropdownDate.current.style.display = 'none';
         }
 
       }
@@ -165,8 +174,6 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
             } 
         }
 
-        console.log(rows)
-
         for (let i = 0; i < newData.length; i++) {
             if (checkedFilters.includes(newData[i].transactionType)) {
                 rows[i]["transTypeCol"] = true
@@ -195,8 +202,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
             else {
                 rows[i]["priceCol"] = false
             }
-            console.log(newData)
-            console.log(newData[i].quantity)
+
             if (checkedFilters.includes(String(newData[i].quantity))) {
                 rows[i]["quantityCol"] = true
             }

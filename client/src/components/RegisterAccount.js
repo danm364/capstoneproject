@@ -31,7 +31,7 @@ const RegisterAccount = () => {
                     date : date
                 }).then((response) => {
                     console.log(response)
-                        if (response.data.message.length > 0) {
+                        if (response.data === true) {
                             error.style.display = "none"
                             navigate('/login', {replace: true})
                         }

@@ -18,15 +18,16 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
             axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/loginValidation`, {
                 email : email,
                 password : password
+            }, {
+                withCredentials: true
             }).then((response) => {
                 console.log(response)
                 if (response.data.isSuccessful) {
 
                     error.style.display = "none"
-                    document.cookie = `token=${response.data.token}`
-               
-                    setLoggedIn(!loggedIn)
-                    setCurrentAccount(response.data.profile)
+                    console.log(response.data.profile)
+                    
+                    setCurrentAccount(response.data)
                 }
                 else {
                     error.style.display = "block"
