@@ -15,6 +15,8 @@ const Invest = (currentAccount) => {
     let [sellTicker, setSellTicker] = useState('');
     let [sellPrice, setSellPrice] = useState('');
 
+    
+
     return (
         <div className="invest__wrap">
             <main className="invest__container">

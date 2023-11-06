@@ -1,39 +1,87 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './scss/main.css';
 import Login from './components/Login';
 import Pricing from './components/Pricing';
 import Portfolio from './components/portfolio/Portfolio';
 import Invest from './components/Invest';
 import RegisterAccount from './components/RegisterAccount'
-import {Routes, Route, Link, Navigate} from 'react-router-dom';
+import {Routes, Route, Link, Navigate, useNavigate} from 'react-router-dom';
+import axios from "axios";
 
 function App() {
 
-  const [loggedIn, setLoggedIn] = useState(false)
-  const [currentAccount, setCurrentAccount] = useState(0)
+  let navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false)
+  const [currentAccount, setCurrentAccount] = useState({})
+
+  function getCookieValue(name) {
+    console.log(name)
+    const value = document.cookie;
+    const parts = value.split("=");
+    console.log(parts)
+
+    if (parts.length === 2) return parts[1]
+}
+
+function handleLogout() {
+  axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/logout`, {}, {
+    withCredentials: true
+  }).then((response) => {
+        console.log("hello")
+          setCurrentAccount({})
+          navigate('/', {replace: true})
+      })
+}
+
+  // useEffect(() => {
+  //   axios.get(`${process.env.REACT_APP_HOST_DATA}/accounts/authenticateUser`, {
+
+  //       headers : {
+  //           Authorization : `Bearer ${getCookieValue(document.cookie)}` 
+  //       }
+        
+  //   }).then((response) => {
+
+  //       setLoggedIn(true)
+  //       console.log(getCookieValue(document.cookie))
+  //       console.log(response)
+  //   })
+  // })  
+ 
+
+  if (loading) return <div>Loading ...</div>
 
   return (
     <div className="App">
+
+
       <nav className='nav'>
             <ul className="navbar">
+              
               <li className="navbar__item">
                 <Link to="/" className="navbar__btn" >Home</Link>
               </li>               
               <li className="navbar__item ">
-                <Link to="/invest" className="navbar__btn" >Invest</Link>
-                <Link to="/portfolio" className="navbar__btn" >Portfolio</Link>
-                { loggedIn === false ? (<Link to="/login" className="navbar__btn" >Login</Link>)
-                : (<Link onClick={() => setLoggedIn(!loggedIn)} className="navbar__btn"> Logout</Link>)
-                
+                  {(!loading && currentAccount.profile) ?
+                    <Link to="/invest" className="navbar__btn" >Invest</Link>
+                    : <div></div>}
+                  {(!loading && currentAccount.profile) ?
+                    <Link to="/portfolio" className="navbar__btn" >Portfolio</Link>
+                    : <div></div>
+                  }       
+                {(!loading && currentAccount.profile) ?
+                <Link to="/" onClick={handleLogout} className="navbar__btn"> Logout</Link>
+                : <Link to="/login" className="navbar__btn" >Login</Link>
                 }
               </li>
           </ul>
       </nav>
       <Routes>
         <Route path="/" element={<Pricing />} />
-        <Route path="/login" element={loggedIn === false ? <Login setCurrentAccount={setCurrentAccount} currentAccount={currentAccount} loggedIn={loggedIn} setLoggedIn={setLoggedIn} /> : <Navigate to="/portfolio" />} />
-        <Route path="/invest" element={loggedIn ? <Invest currentAccount={currentAccount} /> : <Navigate to="/login" replace />} />
-        <Route path="/portfolio" element={loggedIn ? <Portfolio currentAccount={currentAccount} /> : <Navigate to="/login" replace/>} />
+        <Route path="/login" element={<Login setCurrentAccount={setCurrentAccount} currentAccount={currentAccount}  />} />
+        <Route path="/invest" element={<Invest currentAccount={currentAccount} /> } />
+        <Route path="/portfolio" element={<Portfolio currentAccount={currentAccount} />} />
         <Route path='/register' element={<RegisterAccount />} />
       </Routes>
     </div>

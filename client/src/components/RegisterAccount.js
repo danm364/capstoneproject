@@ -19,28 +19,28 @@ const RegisterAccount = () => {
         let confirmPassword = e.target.querySelector("#register__confirm-password").value
         let error = e.target.querySelector(".register__error-msg")
 
-        if (email.length > 0 && password.length > 0 && password.length > 0 && confirmPassword.length > 0 && firstName.length > 0 && lastName.length > 0 && password === confirmPassword) {
+            if (email.length > 0 && password.length > 0 && confirmPassword.length > 0 && firstName.length > 0 && lastName.length > 0 && password === confirmPassword) {
 
-            let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
+                let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
 
-            axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/register`, {
-                firstName : firstName,
-                lastName : lastName,
-                email : email,
-                password : password,
-                date : date
-            }).then((response) => {
-                console.log(response)
-                    if (response.data.length > 0) {
-                        error.style.display = "none"
-                        navigate('/login', {replace: true})
-                    }
-                    else {
-                        console.log("error")
-                    }
-                })
-                
-            }
+                axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/register`, {
+                    firstName : firstName,
+                    lastName : lastName,
+                    email : email,
+                    password : password,
+                    date : date
+                }).then((response) => {
+                    console.log(response)
+                        if (response.data === true) {
+                            error.style.display = "none"
+                            navigate('/login', {replace: true})
+                        }
+                        else {
+                            console.log("error")
+                        }
+                    })
+                    
+                }
             else {
                 
                 error.style.display = "block"

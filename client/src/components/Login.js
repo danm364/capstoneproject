@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import {Navigate, Link} from 'react-router-dom';
-
+import {Navigate, Link, redirect, useNavigate} from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
+
+    let navigate = useNavigate();
 
     function checkValidUser(e) {
         e.preventDefault()
@@ -16,14 +18,17 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
             axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/loginValidation`, {
                 email : email,
                 password : password
+            }, {
+                withCredentials: true
             }).then((response) => {
-
-        
-                if (response.data.length > 0) {
+                console.log(response)
+                if (response.data.isSuccessful) {
 
                     error.style.display = "none"
-                    setLoggedIn(!loggedIn)
-                    setCurrentAccount(response.data[0]["profile_id"])
+                    console.log(response.data.profile)
+                    
+                    setCurrentAccount(response.data)
+                    navigate('/', {replace: true})
                 }
                 else {
                     error.style.display = "block"
@@ -33,6 +38,8 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
     }
 
     let resetError = useRef(null)
+
+    
 
     useEffect(() => {
         
