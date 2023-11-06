@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import {Navigate, Link} from 'react-router-dom';
+import {Navigate, Link, redirect, useNavigate} from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
 
-    
+    let navigate = useNavigate();
 
     function checkValidUser(e) {
         e.preventDefault()
@@ -28,6 +28,7 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
                     console.log(response.data.profile)
                     
                     setCurrentAccount(response.data)
+                    navigate('/', {replace: true})
                 }
                 else {
                     error.style.display = "block"

@@ -5,10 +5,12 @@ import Pricing from './components/Pricing';
 import Portfolio from './components/portfolio/Portfolio';
 import Invest from './components/Invest';
 import RegisterAccount from './components/RegisterAccount'
-import {Routes, Route, Link, Navigate} from 'react-router-dom';
+import {Routes, Route, Link, Navigate, useNavigate} from 'react-router-dom';
 import axios from "axios";
 
 function App() {
+
+  let navigate = useNavigate();
 
   const [loading, setLoading] = useState(false)
   const [currentAccount, setCurrentAccount] = useState({})
@@ -20,6 +22,16 @@ function App() {
     console.log(parts)
 
     if (parts.length === 2) return parts[1]
+}
+
+function handleLogout() {
+  axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/logout`, {}, {
+    withCredentials: true
+  }).then((response) => {
+        console.log("hello")
+          setCurrentAccount({})
+          navigate('/', {replace: true})
+      })
 }
 
   // useEffect(() => {
@@ -36,8 +48,7 @@ function App() {
   //       console.log(response)
   //   })
   // })  
-  console.log(currentAccount.profile)
-  console.log(!loading)
+ 
 
   if (loading) return <div>Loading ...</div>
 
@@ -60,7 +71,7 @@ function App() {
                     : <div></div>
                   }       
                 {(!loading && currentAccount.profile) ?
-                <Link to="/logout" className="navbar__btn"> Logout</Link>
+                <Link to="/" onClick={handleLogout} className="navbar__btn"> Logout</Link>
                 : <Link to="/login" className="navbar__btn" >Login</Link>
                 }
               </li>

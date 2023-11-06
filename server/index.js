@@ -8,7 +8,7 @@ const holdingsRoutes = require("./routes/holdingsRoutes")
 const loginRoutes = require("./routes/loginRoutes")
 const database = require ("./database/sqlDb")
 const cookieParser = require('cookie-parser')
-
+const jwtAuth = require('./utility/jwtAuth')
 //Express setup
 const app = express()
 app.use(bodyParser.json());
@@ -17,9 +17,8 @@ app.use(cors({
   origin : "http://localhost:3000",
   credentials : true
 }));
-require('dotenv').config();
 
-const jwtAuth = require('./utility/jwtAuth')
+
 
 
 app.listen(port, () => {

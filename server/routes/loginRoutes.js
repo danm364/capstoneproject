@@ -91,6 +91,19 @@ const loginLimiter = rateLimit({
     message: "Too many login attempts, please try again in 15 minutes.",
 });
 
+
+async function addNewRefreshToken(refreshToken, profile_id) {
+
+    let queryData = [refreshToken, profile_id]
+    const updateRequest = "UPDATE profiles SET refreshToken = ? WHERE profile_id = ?"
+
+    pool.query(updateRequest, queryData, (err, result) => {
+        if (err) {
+            reject(err)
+        }
+        })
+}
+
 // router.get("/refreshToken", async (req, res) => {
 //     const refreshToken = req.cookies.refreshToken
 
@@ -121,7 +134,7 @@ router.post("/loginValidation", loginLimiter, async (req, res) => {
     let isLoginSuccessful = {
         isSuccessful : false
     };
-    console.log(req.body)
+
     let email = req.body.email;
     let password = req.body.password;
 
@@ -135,12 +148,15 @@ router.post("/loginValidation", loginLimiter, async (req, res) => {
 
         if (results.length > 0 && await bcrypt.compare(password, results[0].password)) {
 
-            let profile_id = results[0].profile_id
-            let username = results[0].email
+            let refreshToken = await generateToken({username : email}, process.env.REFRESH_TOKEN_SECRET)
+            refreshToken = refreshToken[0].refreshToken
                 
             let accessToken = await generateToken({username: username}, process.env.TOKEN_SECRET)
 
-            let refreshToken = await getRefreshToken(profile_id)
+            let profile_id = results[0].profile_id
+            let username = results[0].email
+            
+            await addNewRefreshToken(refreshToken, profile_id)
 
             isLoginSuccessful = {
 
@@ -151,7 +167,7 @@ router.post("/loginValidation", loginLimiter, async (req, res) => {
 
                 }
 
-                refreshToken = refreshToken[0].refreshToken
+                
 
                 res.header('Access-Control-Allow-Credentials', 'true');
                 res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -174,14 +190,14 @@ router.post("/register", async (req, res) => {
 
     
 
-    const retrieveRequest = 'INSERT INTO profiles (firstname, lastname, email, CashOnHand, password, date_created, refreshToken) Values (?)'
+    const retrieveRequest = 'INSERT INTO profiles (firstname, lastname, email, CashOnHand, password, date_created) Values (?)'
 
-    let refreshToken = await generateToken({username : email}, process.env.REFRESH_TOKEN_SECRET)
+
 
     const salt = await bcrypt.genSalt()
     const hashedPassword = await bcrypt.hash(password, salt)
 
-    const userData = [firstName, lastName, email, 100000, hashedPassword, date, refreshToken]
+    const userData = [firstName, lastName, email, 100000, hashedPassword, date]
 
     
 
@@ -200,6 +216,19 @@ router.post("/register", async (req, res) => {
         res.status(500).send({ message: "Username is not available" })
     }
 })
+
+router.post("/logout", async (req, res) => {
+
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+
+    res.clearCookie("jwt", {
+        httpOnly : true
+    })
+
+    res.send("you are now logged out")
+ })
+
 
 
 //need logout to clear cookie
