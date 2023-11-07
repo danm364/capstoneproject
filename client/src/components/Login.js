@@ -21,13 +21,16 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
             }, {
                 withCredentials: true
             }).then((response) => {
-                console.log(response)
+               
                 if (response.data.isSuccessful) {
 
                     error.style.display = "none"
-                    console.log(response.data.profile)
+                    console.log(response.data)
                     
-                    setCurrentAccount(response.data)
+                    let profileInfo = response.data
+                    console.log(currentAccount)
+                    setCurrentAccount(({...currentAccount, ...profileInfo}))
+                    console.log(currentAccount)
                     navigate('/', {replace: true})
                 }
                 else {

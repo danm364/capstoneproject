@@ -10,12 +10,17 @@ import BarChart from "./BarChart";
 const Portfolio = (currentAccount) => {
 
     const [stocks, setStocks] = useState([])
-
+    let token = currentAccount.currentAccount.token
+    
     useEffect(() => {
 
         try {
         axios.post("http://localhost:3500/holdings/selectHoldings", {
             currentAccount
+        }, {
+            headers : {
+                'Authorization' : `Bearer ${token}`
+            }
         })
             .then((response) => {
                 

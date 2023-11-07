@@ -18,9 +18,13 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
     
 
     useEffect(() => {
-
+        let token = currentAccount.currentAccount.token
         axios.post("http://localhost:3500/transactions/retrieveTrans", {
             currentAccount : currentAccount.currentAccount
+        }, {
+            headers : {
+                'Authorization' : `Bearer ${token}`
+            }
         })
         .then(response => {
             let allCheckBoxes = document.querySelectorAll(".feed__dropdown-component")
