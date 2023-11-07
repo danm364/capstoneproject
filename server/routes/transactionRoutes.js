@@ -71,7 +71,7 @@ router.post('/buy', async (req, res) => {
       // Calculate CashOnHand and sellsMinusBuysQuantity
       let CashOnHand = cashAmount;
       const sellsMinusBuysQuantity = (totalQuantity - (quantityOfSells)) - (quantityOfSells);
-  
+      
       // Check if there's enough quantity to sell
       if (sellsMinusBuysQuantity > data.quantity && sellsMinusBuysQuantity > -1) {
         // Update CashOnHand after the sell is posted
@@ -80,7 +80,7 @@ router.post('/buy', async (req, res) => {
   
         // Insert the sell transaction
         await insertSellTransaction(data.profile, secID, data.price, data.quantity, data.date);
-  
+        
         const result = {
           ticker: data.ticker,
           price: data.price,
@@ -98,7 +98,7 @@ router.post('/buy', async (req, res) => {
 
   router.post("/retrieveTrans", (req, res) => {
 
-    profile_id = req.body.currentAccount
+    profile_id = req.body.currentAccount.profile
 
     const retrieveRequest = "SELECT T.transaction_id, T.transactionType, S.symbol, T.price, T.quantity, T.transaction_date FROM stockgamedata.transactions T INNER JOIN security S ON T.security_id = S.security_id WHERE T.profile_id = ? ORDER BY transaction_date DESC LIMIT ?"
 
@@ -116,7 +116,6 @@ router.post('/buy', async (req, res) => {
   async function getProfileCash(profile) {
     return new Promise((resolve, reject) => {
       const selectProfileCash = `SELECT CashOnHand CashOnHand FROM profiles WHERE profile_id = ?`;
-
 
       pool.query(selectProfileCash, [profile], (err, result) => {
         if (err) {

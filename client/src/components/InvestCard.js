@@ -36,16 +36,23 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
           
         axios(options).then((response) => {
 
+            let profile_id = currentAccount.currentAccount.profile
+            let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
+            let token = currentAccount.currentAccount.token
+
             if (header === 'Sell') {
-                let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
                 
                 axios.post(`${process.env.REACT_APP_HOST_DATA}/transactions/sell`, {
-                    profile: parseInt(currentAccount.currentAccount),
+                    profile: parseInt(profile_id),
                     transactionType: header,
                     ticker: response.data['Global Quote']['01. symbol'],
                     price: parseFloat(response.data['Global Quote']['05. price']),
                     quantity: parseInt(quantity.value),
                     date: date.toLocaleString()
+                }, {
+                    headers : {
+                        'Authorization' : `Bearer ${token}`
+                    }
                 }).then((response,err) => {
                     setSellPrice(response.data.price)
                     setSellTicker(response.data.ticker)
@@ -53,11 +60,10 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
             }
             else if (header === 'Buy') {
                 let date = dateFormatter( new Date(), "yyyy-mm-dd HH:MM:ss" );
-                console.log(currentAccount)
 
                 axios.post(`${process.env.REACT_APP_HOST_DATA}/transactions/buy`, {
                     
-                    profile: currentAccount.currentAccount,
+                    profile: parseInt(profile_id),
                     transactionType: header,
                     ticker: response.data['Global Quote']['01. symbol'],
                     price: parseFloat(response.data['Global Quote']['05. price']),
@@ -65,8 +71,11 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
                     date: date
                     
                     
+                }, {
+                    headers : {
+                        'Authorization' : `Bearer ${token}`
+                    }
                 }).then((response) => {
-                    console.log(response)
 
                     setBuyPrice(response.data.price)
                     setBuyTicker(response.data.ticker)

@@ -10,7 +10,7 @@ require('dotenv').config();
 
 
     async function generateToken(username, secret) {
-        return jwt.sign(username, secret, { expiresIn: '100s' });
+        return jwt.sign(username, secret, { expiresIn: '900s' });
     }
 
     async function checkForDuplicateUser(allEmails, currentUserEmail) {
@@ -145,17 +145,17 @@ router.post("/loginValidation", loginLimiter, async (req, res) => {
     try{
 
         const [results] = await pool.promise().query(retrieveRequest, [email]);
-
+       
         if (results.length > 0 && await bcrypt.compare(password, results[0].password)) {
+
+            let profile_id = results[0].profile_id
+            let username = results[0].email
 
             let refreshToken = await generateToken({username : email}, process.env.REFRESH_TOKEN_SECRET)
             refreshToken = refreshToken[0].refreshToken
                 
             let accessToken = await generateToken({username: username}, process.env.TOKEN_SECRET)
 
-            let profile_id = results[0].profile_id
-            let username = results[0].email
-            
             await addNewRefreshToken(refreshToken, profile_id)
 
             isLoginSuccessful = {
