@@ -5,24 +5,19 @@ import Pricing from './components/Pricing';
 import Portfolio from './components/portfolio/Portfolio';
 import Invest from './components/Invest';
 import RegisterAccount from './components/RegisterAccount'
-import {Routes, Route, Link, Navigate, useNavigate} from 'react-router-dom';
+import {Routes, Route, Link, useNavigate} from 'react-router-dom';
 import axios from "axios";
 
 function App() {
-
   let navigate = useNavigate();
 
   const [loading, setLoading] = useState(false)
   const [currentAccount, setCurrentAccount] = useState({})
-
-  function getCookieValue(name) {
-    console.log(name)
-    const value = document.cookie;
-    const parts = value.split("=");
-    console.log(parts)
-
-    if (parts.length === 2) return parts[1]
-}
+  console.log(currentAccount)
+  console.log(Object.keys(currentAccount).length > 0)
+  let profile = Object.keys(currentAccount).length > 0 ? parseInt(currentAccount.profile) : 0
+  let username = Object.keys(currentAccount).length > 0 ? currentAccount.username : ""
+  let token = Object.keys(currentAccount).length > 0 ? currentAccount.token : ""
 
 function handleLogout() {
   axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/logout`, {}, {
@@ -34,20 +29,17 @@ function handleLogout() {
       })
 }
 
-  // useEffect(() => {
-  //   axios.get(`${process.env.REACT_APP_HOST_DATA}/accounts/authenticateUser`, {
+  useEffect(() => {
+    axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/refreshToken`, {
+          profile : profile,
+          username : username
+    }, {
+      withCredentials: true
+    }).then((response) => {
 
-  //       headers : {
-  //           Authorization : `Bearer ${getCookieValue(document.cookie)}` 
-  //       }
-        
-  //   }).then((response) => {
-
-  //       setLoggedIn(true)
-  //       console.log(getCookieValue(document.cookie))
-  //       console.log(response)
-  //   })
-  // })  
+      console.log(response)
+    })
+  }, [profile, username])  
  
 
   if (loading) return <div>Loading ...</div>
@@ -80,8 +72,8 @@ function handleLogout() {
       <Routes>
         <Route path="/" element={<Pricing />} />
         <Route path="/login" element={<Login setCurrentAccount={setCurrentAccount} currentAccount={currentAccount}  />} />
-        <Route path="/invest" element={<Invest currentAccount={currentAccount} /> } />
-        <Route path="/portfolio" element={<Portfolio currentAccount={currentAccount} />} />
+        <Route path="/invest" element={(!loading && currentAccount.profile) ? <Invest currentAccount={currentAccount} /> : <Login setCurrentAccount={setCurrentAccount} currentAccount={currentAccount}  /> } />
+        <Route path="/portfolio" element={(!loading && currentAccount.profile) ? <Portfolio currentAccount={currentAccount} /> : <Login setCurrentAccount={setCurrentAccount} currentAccount={currentAccount}  /> } />
         <Route path='/register' element={<RegisterAccount />} />
       </Routes>
     </div>

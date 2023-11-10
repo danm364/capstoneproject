@@ -13,14 +13,14 @@ require('dotenv').config();
         return jwt.sign(username, secret, { expiresIn: '900s' });
     }
 
-    async function checkForDuplicateUser(allEmails, currentUserEmail) {
+    async function checkForUser(allEmails, currentUserEmail) {
         return new Promise((resolve, reject) => {
             for (let i = 0; i < allEmails.length; i++) {
                 if (allEmails[i] === currentUserEmail) {
-                    return true
+                    resolve(true)
                 }
                 else {
-                    return false
+                    reject(false)
                 }
             }
         })
@@ -104,44 +104,66 @@ async function addNewRefreshToken(refreshToken, profile_id) {
         })
 }
 
-// router.get("/refreshToken", async (req, res) => {
-//     const refreshToken = req.cookies.refreshToken
-
-//     if (!refreshToken) return res.send({accessToken : ''})
-//     isAuthenticated = true
-
-//     payload = null
-
-//     try {
-//         payload = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
-//     }
-//     catch (err) {
-//         return res.send({accessToken : ''})
-//     }
-
-//     let allEmails = await getAllEmails()
-
-//     duplicateUser = await checkForDuplicateUser(req.cookies.user, )
+router.post("/refreshToken", async (req, res) => {
+    console.log(req.body)
+    const refreshToken = req.cookies.jwt
+    console.log(refreshToken)
+    let username = req.body.username
+    let profile_id = req.body.profile
     
+    if (!refreshToken) return res.send({accessToken : ''})
 
+    let payload = null
+    
+    try {
+        payload = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+    }
+    catch (err) {
+        return res.send({accessToken : ''})
+    }
+    try {
+        let allEmails = await getAllEmails()
 
+        let user = await checkForUser(allEmails, req.cookies.user )
 
-//     res.json(isAuthenticated)
-// })
+        if (!user) return res.send({accessToken : ''})
+
+        dbRefreshToken = await getRefreshToken(profile_id)
+
+        if (dbRefreshToken !== refreshToken) return res.send({accessToken : ''})
+
+        refreshToken = await generateToken({username : username}, process.env.REFRESH_TOKEN_SECRET)
+        refreshToken = refreshToken
+
+        let accessToken = await generateToken({username: username}, process.env.TOKEN_SECRET)
+
+        await addNewRefreshToken(refreshToken, profile_id)
+    }
+    catch {
+        return res.send({accessToken : ''})
+    }
+
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+
+    res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
+    res.json(accessToken)
+    
+})
 
 router.post("/loginValidation", loginLimiter, async (req, res) => {
    
     let isLoginSuccessful = {
         isSuccessful : false
     };
-
+    console.log(req.body)
     let email = req.body.email;
     let password = req.body.password;
 
     const retrieveRequest = 'SELECT profile_id ,email, password FROM profiles WHERE email = ?'
 
     
-
+    
     try{
 
         const [results] = await pool.promise().query(retrieveRequest, [email]);
@@ -150,14 +172,13 @@ router.post("/loginValidation", loginLimiter, async (req, res) => {
 
             let profile_id = results[0].profile_id
             let username = results[0].email
-
-            let refreshToken = await generateToken({username : email}, process.env.REFRESH_TOKEN_SECRET)
-            refreshToken = refreshToken[0].refreshToken
+            
+            let refreshToken = await generateToken({username : username}, process.env.REFRESH_TOKEN_SECRET)
                 
             let accessToken = await generateToken({username: username}, process.env.TOKEN_SECRET)
 
             await addNewRefreshToken(refreshToken, profile_id)
-
+            
             isLoginSuccessful = {
 
                     isSuccessful : true,
@@ -166,9 +187,7 @@ router.post("/loginValidation", loginLimiter, async (req, res) => {
                     token : accessToken
 
                 }
-
                 
-
                 res.header('Access-Control-Allow-Credentials', 'true');
                 res.header('Access-Control-Allow-Origin', req.headers.origin);
 
