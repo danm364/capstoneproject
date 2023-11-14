@@ -6,7 +6,6 @@ import filterImage from '../assets/images/filter.svg'
 
 
 const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
-    
     let dropdownTransType = useRef(null)
     let dropdownSymbol = useRef(null)
     let dropdownPrice = useRef(null)
@@ -18,9 +17,9 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
     
 
     useEffect(() => {
-        let token = currentAccount.currentAccount.token
+        let token = currentAccount.token
         axios.post("http://localhost:3500/transactions/retrieveTrans", {
-            currentAccount : currentAccount.currentAccount
+            currentAccount : currentAccount
         }, {
             headers : {
                 'Authorization' : `Bearer ${token}`

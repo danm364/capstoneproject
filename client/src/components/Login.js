@@ -21,16 +21,17 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
             }, {
                 withCredentials: true
             }).then((response) => {
-               
-                if (response.data.isSuccessful) {
-
+                if (response.data.accessToken) {
                     error.style.display = "none"
-                    console.log(response.data)
+
+                    let responseData = parseJwt(response.data.accessToken)
                     
-                    let profileInfo = response.data
-                    console.log(currentAccount)
-                    setCurrentAccount(({...currentAccount, ...profileInfo}))
-                    console.log(currentAccount)
+                    let profileInfo = {
+                        username : responseData.username.username,
+                        profile :responseData.profile_id.profile_id
+                    }
+                    
+                    setCurrentAccount(({...currentAccount, profile : profileInfo.profile, username : profileInfo.username, token : response.data.accessToken}))
                     navigate('/', {replace: true})
                 }
                 else {
@@ -49,6 +50,25 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
         resetError.current.style.display = "none"
 
     }, [])
+
+    function parseJwt(token) {
+        try {
+            // Split the token into its parts
+            const parts = token.split('.');
+            if (parts.length !== 3) {
+                throw new Error('The token is invalid');
+            }
+    
+            // Decode the payload
+            const decodedPayload = atob(parts[1]);
+    
+            // Parse the decoded payload
+            return JSON.parse(decodedPayload);
+        } catch (error) {
+            console.error('Failed to parse JWT:', error);
+            return null;
+        }
+    }
 
     return (
         <div>

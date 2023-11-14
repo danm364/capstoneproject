@@ -1,28 +1,32 @@
 const express = require('express');
 const router = express.Router();
 const pool = require("../database/sqlDb");
-const axios = require("axios")
-const bcrypt = require("bcrypt")
+const axios = require("axios");
+const bcrypt = require("bcrypt");
 const rateLimit = require("express-rate-limit");
 const jwt = require('jsonwebtoken');
 const jwtAuth = require("../utility/jwtAuth")
 require('dotenv').config();
 
 
+    async function generateAccessToken(username, profile_id, secret) {
+        return jwt.sign({username, profile_id}, secret, { expiresIn: '500s' });
+    }
+
     async function generateToken(username, secret) {
-        return jwt.sign(username, secret, { expiresIn: '900s' });
+        return jwt.sign({username}, secret, { expiresIn: '1500s' });
     }
 
     async function checkForUser(allEmails, currentUserEmail) {
         return new Promise((resolve, reject) => {
             for (let i = 0; i < allEmails.length; i++) {
-                if (allEmails[i] === currentUserEmail) {
+                if (allEmails[i].email === currentUserEmail) {
                     resolve(true)
+                    return
                 }
-                else {
-                    reject(false)
-                }
+                
             }
+            reject(false)
         })
     }
 
@@ -34,7 +38,6 @@ require('dotenv').config();
                     emailWasDuplicated = true
                 }
             }
-
             if (emailWasDuplicated === false) {
 
                 pool.query(retrieveRequest, [userData], (err, result) => {
@@ -51,9 +54,7 @@ require('dotenv').config();
             else {
                 reject(err)
             }
-
         })
-        
   }
 
   async function getAllEmails() {
@@ -71,10 +72,10 @@ require('dotenv').config();
         })
     })  
   }
-  async function getRefreshToken(profile_id) {
+  async function getRefreshToken(email) {
     return new Promise((resolve, reject) => {
-        let selectToken = "SELECT refreshToken FROM profiles WHERE profile_id = ?"
-        pool.query(selectToken, [profile_id], (err, result) => {
+        let selectToken = "SELECT refreshToken, profile_id FROM profiles WHERE email = ?"
+        pool.query(selectToken, [email], (err, result) => {
             if (err) {
                 reject(err)
             }
@@ -105,49 +106,48 @@ async function addNewRefreshToken(refreshToken, profile_id) {
 }
 
 router.post("/refreshToken", async (req, res) => {
-    console.log(req.body)
     const refreshToken = req.cookies.jwt
-    console.log(refreshToken)
-    let username = req.body.username
-    let profile_id = req.body.profile
     
+    let username = refreshToken ? jwtAuth.parseJwt(refreshToken).username.username : null
     if (!refreshToken) return res.send({accessToken : ''})
-
     let payload = null
-    
     try {
-        payload = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+        payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
     }
     catch (err) {
         return res.send({accessToken : ''})
     }
     try {
+        
         let allEmails = await getAllEmails()
-
-        let user = await checkForUser(allEmails, req.cookies.user )
-
+       
+        let user = await checkForUser(allEmails, username )
+        
         if (!user) return res.send({accessToken : ''})
-
-        dbRefreshToken = await getRefreshToken(profile_id)
-
+        
+        profileInfo = await getRefreshToken(username)
+        
+        dbRefreshToken = profileInfo[0].refreshToken
+        profile_id = profileInfo[0].profile_id
+        
         if (dbRefreshToken !== refreshToken) return res.send({accessToken : ''})
 
-        refreshToken = await generateToken({username : username}, process.env.REFRESH_TOKEN_SECRET)
-        refreshToken = refreshToken
+        newRefreshToken = await generateToken({username : username}, process.env.REFRESH_TOKEN_SECRET)
+        
+        let accessToken = await generateAccessToken({username : username},{ profile_id : profile_id}, process.env.TOKEN_SECRET)
+        await addNewRefreshToken(newRefreshToken, profile_id)
+        
+        res.header('Access-Control-Allow-Credentials', 'true');
+        res.header('Access-Control-Allow-Origin', req.headers.origin);
 
-        let accessToken = await generateToken({username: username}, process.env.TOKEN_SECRET)
-
-        await addNewRefreshToken(refreshToken, profile_id)
+        res.cookie('jwt', newRefreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
+        res.json(accessToken)
+    
     }
     catch {
         return res.send({accessToken : ''})
     }
 
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Origin', req.headers.origin);
-
-    res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
-    res.json(accessToken)
     
 })
 
@@ -156,7 +156,6 @@ router.post("/loginValidation", loginLimiter, async (req, res) => {
     let isLoginSuccessful = {
         isSuccessful : false
     };
-    console.log(req.body)
     let email = req.body.email;
     let password = req.body.password;
 
@@ -172,19 +171,17 @@ router.post("/loginValidation", loginLimiter, async (req, res) => {
 
             let profile_id = results[0].profile_id
             let username = results[0].email
-            
             let refreshToken = await generateToken({username : username}, process.env.REFRESH_TOKEN_SECRET)
                 
-            let accessToken = await generateToken({username: username}, process.env.TOKEN_SECRET)
-
+            let accessToken = await generateAccessToken({username: username}, {profile_id: profile_id}, process.env.TOKEN_SECRET)
             await addNewRefreshToken(refreshToken, profile_id)
             
             isLoginSuccessful = {
 
                     isSuccessful : true,
                     profile : profile_id,
-                    username : username,
-                    token : accessToken
+                    username : username
+
 
                 }
                 
@@ -192,7 +189,8 @@ router.post("/loginValidation", loginLimiter, async (req, res) => {
                 res.header('Access-Control-Allow-Origin', req.headers.origin);
 
                 res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
-                res.send(isLoginSuccessful)
+                res.json({accessToken})
+           
             }
         }
         catch  (error) {
