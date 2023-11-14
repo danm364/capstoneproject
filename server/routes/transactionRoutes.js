@@ -97,7 +97,7 @@ router.post('/buy', async (req, res) => {
   });
 
   router.post("/retrieveTrans", (req, res) => {
-
+    
     profile_id = req.body.currentAccount.profile
 
     const retrieveRequest = "SELECT T.transaction_id, T.transactionType, S.symbol, T.price, T.quantity, T.transaction_date FROM stockgamedata.transactions T INNER JOIN security S ON T.security_id = S.security_id WHERE T.profile_id = ? ORDER BY transaction_date DESC LIMIT ?"

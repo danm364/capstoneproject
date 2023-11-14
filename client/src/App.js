@@ -5,57 +5,65 @@ import Pricing from './components/Pricing';
 import Portfolio from './components/portfolio/Portfolio';
 import Invest from './components/Invest';
 import RegisterAccount from './components/RegisterAccount'
-import {Routes, Route, Link, Navigate, useNavigate} from 'react-router-dom';
+import {Routes, Route, Link, useNavigate} from 'react-router-dom';
 import axios from "axios";
 
 function App() {
 
+  function parseJwt(token) {
+    try {
+        // Split the token into its parts
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+            throw new Error('The token is invalid');
+        }
+
+        // Decode the payload
+        const decodedPayload = atob(parts[1]);
+
+        // Parse the decoded payload
+        return JSON.parse(decodedPayload);
+    } catch (error) {
+        console.error('Failed to parse JWT:', error);
+        return null;
+    }
+}
   let navigate = useNavigate();
 
   const [loading, setLoading] = useState(false)
   const [currentAccount, setCurrentAccount] = useState({})
 
-  function getCookieValue(name) {
-    console.log(name)
-    const value = document.cookie;
-    const parts = value.split("=");
-    console.log(parts)
-
-    if (parts.length === 2) return parts[1]
-}
+  let profile = Object.keys(currentAccount).length > 0 ? parseInt(currentAccount.profile) : 0
+  let username = Object.keys(currentAccount).length > 0 ? currentAccount.username : ""
+  let token = Object.keys(currentAccount).length > 0 ? currentAccount.token : ""
 
 function handleLogout() {
   axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/logout`, {}, {
     withCredentials: true
   }).then((response) => {
-        console.log("hello")
           setCurrentAccount({})
           navigate('/', {replace: true})
       })
 }
+  useEffect(() => {
+    axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/refreshToken`,{}, {
+      withCredentials: true
+    }).then((response) => {
 
-  // useEffect(() => {
-  //   axios.get(`${process.env.REACT_APP_HOST_DATA}/accounts/authenticateUser`, {
+      console.log(response.data)
+      let accessToken = response.data
+      let responseData = response.data.accessToken !== "" ? parseJwt(response.data) : {}
+      let profile = responseData.profile_id?.profile_id ? responseData.profile_id.profile_id : {}
+      let username = responseData.username?.username ? responseData.username.username : {}
 
-  //       headers : {
-  //           Authorization : `Bearer ${getCookieValue(document.cookie)}` 
-  //       }
-        
-  //   }).then((response) => {
-
-  //       setLoggedIn(true)
-  //       console.log(getCookieValue(document.cookie))
-  //       console.log(response)
-  //   })
-  // })  
- 
+      setCurrentAccount({...currentAccount, profile : profile, username : username, token : accessToken})
+    })
+  }, [])  
 
   if (loading) return <div>Loading ...</div>
 
   return (
     <div className="App">
-
-
       <nav className='nav'>
             <ul className="navbar">
               
@@ -80,8 +88,8 @@ function handleLogout() {
       <Routes>
         <Route path="/" element={<Pricing />} />
         <Route path="/login" element={<Login setCurrentAccount={setCurrentAccount} currentAccount={currentAccount}  />} />
-        <Route path="/invest" element={<Invest currentAccount={currentAccount} /> } />
-        <Route path="/portfolio" element={<Portfolio currentAccount={currentAccount} />} />
+        <Route path="/invest" element={(!loading && currentAccount.profile) ? <Invest currentAccount={currentAccount} /> : <Login setCurrentAccount={setCurrentAccount} currentAccount={currentAccount}  /> } />
+        <Route path="/portfolio" element={(!loading && currentAccount.profile) ? <Portfolio currentAccount={currentAccount} /> : <Login setCurrentAccount={setCurrentAccount} currentAccount={currentAccount}  /> } />
         <Route path='/register' element={<RegisterAccount />} />
       </Routes>
     </div>

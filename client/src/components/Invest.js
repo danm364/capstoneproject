@@ -4,7 +4,7 @@ import TransactionFeed from "./TransactionsFeed";
 
 
 
-const Invest = (currentAccount) => {
+const Invest = ({currentAccount}) => {
 
     let [quoteTicker, setQuoteTicker] = useState('');
     let [quotePrice, setQuotePrice] = useState('');
@@ -14,8 +14,6 @@ const Invest = (currentAccount) => {
 
     let [sellTicker, setSellTicker] = useState('');
     let [sellPrice, setSellPrice] = useState('');
-
-    
 
     return (
         <div className="invest__wrap">
