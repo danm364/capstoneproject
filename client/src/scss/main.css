@@ -389,7 +389,7 @@
   flex-direction: column;
 }
 
-.transaction__ticker, .transaction__price {
+.transaction__ticker, .transaction__price, .transaction__error-msg {
   text-align: center;
   display: none;
 }

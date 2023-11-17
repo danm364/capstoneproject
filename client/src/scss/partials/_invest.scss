@@ -173,7 +173,7 @@
 }
 
 .transaction {
-    &__ticker, &__price {
+    &__ticker, &__price, &__error-msg {
         text-align: center;
         display: none;
         

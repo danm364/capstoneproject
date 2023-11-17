@@ -3,7 +3,7 @@ import axios from 'axios';
 import FeedComponent from "./FeedComponent";
 import filterArrow from '../assets/images/filter-arrow.svg';
 import filterImage from '../assets/images/filter.svg'
-
+import { v4 as uuidv4 } from 'uuid';
 
 const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
     let dropdownTransType = useRef(null)
@@ -261,7 +261,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                                 return acc;
 
                             }, []).map((element, index) => (
-                                <label htmlFor={`transtype-input`} className="feed__dropdown-component" >
+                                <label htmlFor={`transtype-input`} className="feed__dropdown-component" key={uuidv4()}>
                                         {element}
                                         <input id={`transtype-input`} className="feed__dropdown-input" type="checkbox" />
                                 </label>
@@ -274,7 +274,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                     </div>
                     {columnData.map((element, index) => (
                         
-                        <div> {element.transactionType}</div>
+                        <div key={uuidv4()}> {element.transactionType}</div>
                     
                     ))} 
                 </div>
@@ -292,7 +292,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                                 return acc;
 
                             }, []).map((element, index) => (
-                                <label htmlFor={`ticker-input`} className="feed__dropdown-component" >
+                                <label htmlFor={`ticker-input`} className="feed__dropdown-component" key={uuidv4()}>
                                         {element}
                                         <input id={`ticker-input`} className="feed__dropdown-input" type="checkbox" />
                                 </label>
@@ -305,7 +305,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                     </div>
                     {columnData.map((element, index) => (
            
-                        <div> {element.symbol}</div>
+                        <div key={uuidv4()}> {element.symbol}</div>
                     
                     ))} 
                     
@@ -324,7 +324,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                                 return acc;
 
                             }, []).map((element, index) => (
-                                <label htmlFor={`price-input`} className="feed__dropdown-component" >
+                                <label htmlFor={`price-input`} className="feed__dropdown-component" key={uuidv4()}>
                                         {element}
                                         <input id={`price-input`} className="feed__dropdown-input" type="checkbox" />
                                 </label>
@@ -337,7 +337,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                     </div>
                     {columnData.map((element, index) => (
            
-                        <div> {element.price}</div>
+                        <div key={uuidv4()}> {element.price}</div>
                     
                     ))}  
                 </div>
@@ -355,7 +355,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                                 return acc;
 
                             }, []).map((element, index) => (
-                                <label htmlFor={`quantity-input`} className="feed__dropdown-component" >
+                                <label htmlFor={`quantity-input`} className="feed__dropdown-component" key={uuidv4()}>
                                         {element}
                                         <input id={`quantity-input`} className="feed__dropdown-input" type="checkbox" />
                                 </label>
@@ -368,7 +368,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                     </div>
                     {columnData.map((element, index) => (
            
-                        <div> {element.quantity}</div>
+                        <div key={uuidv4()}> {element.quantity}</div>
                     
                     ))}  
                 </div>
@@ -386,7 +386,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                                 return acc;
 
                             }, []).map((element, index) => (
-                                <label htmlFor={`date-input`} className="feed__dropdown-component" >
+                                <label htmlFor={`date-input`} className="feed__dropdown-component" key={uuidv4()}>
                                         {element}
                                         <input id={`date-input`} className="feed__dropdown-input" type="checkbox" />
                                 </label>
@@ -399,7 +399,7 @@ const TransactionFeed = ({buyTicker, sellPrice, buyPrice, currentAccount}) => {
                     </div>
                     {columnData.map((element, index) => (
            
-                        <div> {new Date(element.transaction_date).toLocaleString()}</div>
+                        <div key={uuidv4()}> {new Date(element.transaction_date).toLocaleString()}</div>
                     
                     ))}   
                 </div>  

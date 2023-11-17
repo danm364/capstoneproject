@@ -5,7 +5,7 @@ import Pricing from './components/Pricing';
 import Portfolio from './components/portfolio/Portfolio';
 import Invest from './components/Invest';
 import RegisterAccount from './components/RegisterAccount'
-import {Routes, Route, Link, useNavigate} from 'react-router-dom';
+import {Routes, Route, Link, useNavigate, useLocation} from 'react-router-dom';
 import axios from "axios";
 
 function App() {
@@ -32,6 +32,8 @@ function App() {
 
   const [loading, setLoading] = useState(false)
   const [currentAccount, setCurrentAccount] = useState({})
+  let location = useLocation();
+  console.log(location)
 
   let profile = Object.keys(currentAccount).length > 0 ? parseInt(currentAccount.profile) : 0
   let username = Object.keys(currentAccount).length > 0 ? currentAccount.username : ""
@@ -41,24 +43,31 @@ function handleLogout() {
   axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/logout`, {}, {
     withCredentials: true
   }).then((response) => {
+          console.log(currentAccount)
           setCurrentAccount({})
+          console.log(currentAccount)
           navigate('/', {replace: true})
       })
 }
+console.log(currentAccount)
   useEffect(() => {
     axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/refreshToken`,{}, {
       withCredentials: true
     }).then((response) => {
-
-      console.log(response.data)
       let accessToken = response.data
       let responseData = response.data.accessToken !== "" ? parseJwt(response.data) : {}
       let profile = responseData.profile_id?.profile_id ? responseData.profile_id.profile_id : {}
       let username = responseData.username?.username ? responseData.username.username : {}
-
-      setCurrentAccount({...currentAccount, profile : profile, username : username, token : accessToken})
+      console.log(response)
+      if (Object.keys(username).length > 0) {
+        setCurrentAccount({...currentAccount, profile : profile, username : username, token : accessToken})
+      }
+      else {
+        setCurrentAccount({})
+      }
+      
     })
-  }, [])  
+  }, [currentAccount.token, location])  
 
   if (loading) return <div>Loading ...</div>
 
