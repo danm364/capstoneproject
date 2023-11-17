@@ -56,7 +56,7 @@ router.post('/buy', async (req, res) => {
   router.post('/sell', async (req, res) => {
     try {
       const data = req.body;
-  
+      console.log(data)
       // Get security ID based on the ticker symbol
       const secID = await getSecurityId(data.ticker);
   

@@ -15,8 +15,15 @@ const InvestCard = ({quotePrice, quoteTicker, setQuoteTicker, setQuotePrice, set
         const errorMessage = e.target.querySelector(".transaction__error-msg")
 
         let transQuantity = e.target.querySelector(".invest__quantity")
-
         const ticker = e.target.querySelector('.invest__ticker').value
+        console.log(ticker)
+        console.log(transQuantity)
+        if (!confirmPrice || !transQuantity.value) {
+            errorMessage.style.display = "block"
+            errorMessage.style.color = "red"
+            setErrorMsg("Please enter both a Quantity and Ticker")
+            return
+        }
         
         const options = {
             method: 'GET',

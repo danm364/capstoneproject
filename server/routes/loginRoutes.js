@@ -10,11 +10,11 @@ require('dotenv').config();
 
 
     async function generateAccessToken(username, profile_id, secret) {
-        return jwt.sign({username, profile_id}, secret, { expiresIn: '30s' });
+        return jwt.sign({username, profile_id}, secret, { expiresIn: '600s' });
     }
 
     async function generateToken(username, secret) {
-        return jwt.sign({username}, secret, { expiresIn: '60s' });
+        return jwt.sign({username}, secret, { expiresIn: '900s' });
     }
 
     async function checkForUser(allEmails, currentUserEmail) {
