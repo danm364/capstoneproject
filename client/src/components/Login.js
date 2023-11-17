@@ -9,12 +9,12 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
 
     function checkValidUser(e) {
         e.preventDefault()
-    
         let email = e.target.querySelector("#login__email").value
         let password = e.target.querySelector("#login__password").value
         let error = e.target.querySelector(".login__error-msg")
     
         if (email.length > 0 && password.length > 0) {
+
             axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/loginValidation`, {
                 email : email,
                 password : password
@@ -23,14 +23,14 @@ const Login = ({loggedIn, setLoggedIn, setCurrentAccount, currentAccount}) => {
             }).then((response) => {
                 if (response.data.accessToken) {
                     error.style.display = "none"
-
+                    
                     let responseData = parseJwt(response.data.accessToken)
                     
                     let profileInfo = {
                         username : responseData.username.username,
                         profile :responseData.profile_id.profile_id
                     }
-                    
+                    console.log("hello")
                     setCurrentAccount(({...currentAccount, profile : profileInfo.profile, username : profileInfo.username, token : response.data.accessToken}))
                     navigate('/', {replace: true})
                 }

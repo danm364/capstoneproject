@@ -5,7 +5,10 @@ const pool = require("../database/sqlDb");
 router.post('/buy', async (req, res) => {
     try {
       const data = req.body;
-  
+      console.log(data)
+      if (data.ticker?.length > 10 || typeof data.ticker !== "string") {
+        throw("This ticker is not appearing in our system")
+      }
       // Get security ID based on the ticker symbol
       const secID = await getSecurityId(data.ticker);
   
@@ -45,7 +48,7 @@ router.post('/buy', async (req, res) => {
       }
     } catch (err) {
       console.log(err);
-      res.status(500).send('Internal Server Error');
+      res.status(500).send(err);
     }
   });
   
@@ -194,6 +197,7 @@ router.post('/buy', async (req, res) => {
         return new Promise((resolve, reject) => {
           pool.query('SELECT security_id FROM security WHERE symbol = ?', [ticker], (err, result) => {
             if (err) {
+              console.log(err)
               reject(err);
             } else {
               resolve(result[0].security_id);

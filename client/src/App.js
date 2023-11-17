@@ -41,24 +41,28 @@ function handleLogout() {
   axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/logout`, {}, {
     withCredentials: true
   }).then((response) => {
+          console.log(currentAccount)
           setCurrentAccount({})
+          console.log(currentAccount)
           navigate('/', {replace: true})
       })
 }
+console.log(currentAccount)
   useEffect(() => {
     axios.post(`${process.env.REACT_APP_HOST_DATA}/accounts/refreshToken`,{}, {
       withCredentials: true
     }).then((response) => {
-
-      console.log(response.data)
       let accessToken = response.data
       let responseData = response.data.accessToken !== "" ? parseJwt(response.data) : {}
       let profile = responseData.profile_id?.profile_id ? responseData.profile_id.profile_id : {}
       let username = responseData.username?.username ? responseData.username.username : {}
 
-      setCurrentAccount({...currentAccount, profile : profile, username : username, token : accessToken})
+      if (Object.keys(username).length > 0) {
+        setCurrentAccount({...currentAccount, profile : profile, username : username, token : accessToken})
+      }
+      
     })
-  }, [])  
+  }, [currentAccount.token])  
 
   if (loading) return <div>Loading ...</div>
 

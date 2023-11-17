@@ -10,11 +10,11 @@ require('dotenv').config();
 
 
     async function generateAccessToken(username, profile_id, secret) {
-        return jwt.sign({username, profile_id}, secret, { expiresIn: '500s' });
+        return jwt.sign({username, profile_id}, secret, { expiresIn: '30s' });
     }
 
     async function generateToken(username, secret) {
-        return jwt.sign({username}, secret, { expiresIn: '1500s' });
+        return jwt.sign({username}, secret, { expiresIn: '60s' });
     }
 
     async function checkForUser(allEmails, currentUserEmail) {
@@ -140,7 +140,7 @@ router.post("/refreshToken", async (req, res) => {
         res.header('Access-Control-Allow-Credentials', 'true');
         res.header('Access-Control-Allow-Origin', req.headers.origin);
 
-        res.cookie('jwt', newRefreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
+        res.cookie('jwt', newRefreshToken, {httpOnly: true, maxAge: 900000 })
         res.json(accessToken)
     
     }
@@ -185,10 +185,11 @@ router.post("/loginValidation", loginLimiter, async (req, res) => {
 
                 }
                 
+                
                 res.header('Access-Control-Allow-Credentials', 'true');
                 res.header('Access-Control-Allow-Origin', req.headers.origin);
 
-                res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
+                res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 900000})
                 res.json({accessToken})
            
             }
